@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>Pavaratty Parish · Altar Boys</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet"/>
+
+<!-- Firebase Compat SDK (v9 compat = global firebase.* variables, no import/export needed) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<style>
+:root{
+  --bg:#f2f4f8;
+  --surface:#fff;
+  --surface2:#f8f9fc;
+  --border:#e4e8ef;
+  --border2:#cdd4df;
+  --text:#1a2035;
+  --text2:#4a5568;
+  --text3:#8a96a8;
+  --text4:#b8c2cf;
+  --pink-p:#fce8ee;--pink-b:#f5b8ce;--pink-t:#be3b6a;--pink-m:#d4527e;
+  --green-p:#e6f7ef;--green-b:#9edcbb;--green-t:#1e7a4a;--green-m:#28a05f;
+  --blue-p:#e8f0fe;--blue-b:#a8c4f8;--blue-t:#2050c8;--blue-m:#3060d8;
+  --lav-p:#f0ebfc;--lav-b:#c8aaee;--lav-t:#6030a8;--lav-m:#7840b8;
+  --sky-p:#e6f6fd;--sky-b:#9ad8f5;--sky-t:#0870a8;--sky-m:#1888c0;
+  --peach-p:#fdf0e6;--peach-b:#f5c898;--peach-t:#a85018;--peach-m:#c86020;
+  --sage-p:#ecf5ee;--sage-b:#a8d8b0;--sage-t:#2a6838;--sage-m:#388048;
+  --acc:#4a78f0;--acc2:#2d55d0;--acc-p:#edf2fe;--acc-b:#b8ccfc;
+  --red:#d83030;--red-p:#fdf0f0;--red-b:#f5a0a0;--red-t:#991515;
+  --warn:#d87820;--warn-p:#fdf5e6;--warn-b:#f8c878;
+  --sh1:0 1px 3px rgba(26,32,53,.07),0 1px 2px rgba(26,32,53,.04);
+  --sh2:0 3px 12px rgba(26,32,53,.09),0 1px 4px rgba(26,32,53,.05);
+  --sh3:0 8px 28px rgba(26,32,53,.11),0 3px 10px rgba(26,32,53,.06);
+  --sh4:0 16px 48px rgba(26,32,53,.14),0 6px 18px rgba(26,32,53,.08);
+  --r6:6px;--r10:10px;--r14:14px;--r18:18px;--r24:24px;--rf:9999px;
+  --ff:'Plus Jakarta Sans',system-ui,sans-serif;
+  --ffs:'Playfair Display',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.55;-webkit-text-size-adjust:100%}
+input,select,button,textarea{font-family:inherit;font-size:inherit}
+button{cursor:pointer;border:none;background:none}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+
+/* HEADER */
+#hdr{
+  background:linear-gradient(135deg,#fff 0%,#f5f0ff 45%,#eef5ff 100%);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:300;
+  box-shadow:var(--sh2);
+}
+.hdr-top{display:flex;align-items:center;gap:14px;padding:13px 22px}
+.logo{width:42px;height:42px;border-radius:var(--r14);flex-shrink:0;
+  background:linear-gradient(135deg,#5070ee 0%,#8848d8 60%,#c050a8 100%);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  box-shadow:0 4px 14px rgba(80,112,238,.38);}
+.brand-name{font-family:var(--ffs);font-size:18px;color:var(--text);letter-spacing:-.2px}
+.brand-sub{font-size:10.5px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.srch{position:relative}
+.srch input{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rf);
+  padding:8px 14px 8px 34px;font-size:12.5px;color:var(--text);outline:none;width:200px;transition:.22s}
+.srch input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(74,120,240,.12);background:#fff;width:240px}
+.srch-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
+.nav{display:flex;padding:0 22px;gap:1px;overflow-x:auto;scrollbar-width:none;border-top:1px solid rgba(228,232,239,.6)}
+.nav::-webkit-scrollbar{display:none}
+.nvb{flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;
+  padding:10px 15px 8px;font-size:12.5px;font-weight:600;color:var(--text3);
+  transition:.15s;white-space:nowrap;display:flex;align-items:center;gap:6px;letter-spacing:.1px}
+.nvb:hover{color:var(--text2);background:rgba(248,249,252,.8)}
+.nvb.on{color:var(--acc);border-bottom-color:var(--acc)}
+.nvb-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);display:none}
+.nvb.on .nvb-dot{display:block}
+
+/* MAIN */
+main{max-width:1120px;margin:0 auto;padding:26px 22px 60px;width:100%}
+
+/* CARDS */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r18);box-shadow:var(--sh1);padding:20px}
+.card+.card{margin-top:14px}
+.card-glow{background:linear-gradient(135deg,#fff 0%,#f5f2ff 50%,#eff5ff 100%);border-color:rgba(180,180,255,.35)}
+
+/* PAGE HERO */
+.hero{
+  background:linear-gradient(135deg,rgba(235,240,255,.9) 0%,rgba(245,235,255,.8) 50%,rgba(235,248,255,.9) 100%);
+  border:1.5px solid rgba(180,190,255,.3);border-radius:var(--r24);
+  padding:20px 22px;margin-bottom:20px;
+  box-shadow:0 2px 20px rgba(80,112,238,.07),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.pg-title{font-family:var(--ffs);font-size:22px;color:var(--text);letter-spacing:-.3px}
+.pg-sub{font-size:12.5px;color:var(--text3);margin-top:3px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border-radius:var(--r10);padding:9px 18px;font-size:13px;font-weight:700;
+  transition:.15s;white-space:nowrap;border:1.5px solid transparent;cursor:pointer;letter-spacing:.1px}
+.btn-primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 3px 10px rgba(74,120,240,.28)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(74,120,240,.38)}
+.btn-success{background:linear-gradient(135deg,#28a05f,#1e7a48);color:#fff;box-shadow:0 3px 10px rgba(40,160,95,.26)}
+.btn-success:hover{transform:translateY(-1px)}
+.btn-danger{background:linear-gradient(135deg,#d83030,#b02020);color:#fff;box-shadow:0 3px 10px rgba(216,48,48,.24)}
+.btn-danger:hover{transform:translateY(-1px)}
+.btn-ghost{background:var(--surface);border-color:var(--border);color:var(--text2);box-shadow:var(--sh1)}
+.btn-ghost:hover{background:var(--surface2);border-color:var(--border2)}
+.btn-pink{background:var(--pink-p);border-color:var(--pink-b);color:var(--pink-t)}
+.btn-pink:hover{background:#f9d5e2}
+.btn-green{background:var(--green-p);border-color:var(--green-b);color:var(--green-t)}
+.btn-blue{background:var(--blue-p);border-color:var(--blue-b);color:var(--blue-t)}
+.btn-sm{padding:6px 12px;font-size:11.5px;border-radius:var(--r6)}
+.btn-lg{padding:11px 24px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:5px}
+.fgl{font-size:10.5px;font-weight:800;color:var(--text2);letter-spacing:.7px;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r10);
+  padding:9.5px 12px;font-size:13px;color:var(--text);outline:none;width:100%;transition:.15s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(74,120,240,.1);background:#fff}
+.fg textarea{resize:vertical;min-height:72px}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%238a96a8' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;appearance:none}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.span2{grid-column:1/-1}
+.filter-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filter-row .fg{flex:1;min-width:120px}
+.filter-row .fg:first-child{flex:2;min-width:200px}
+
+/* BADGES */
+.bdg{display:inline-flex;align-items:center;border-radius:var(--rf);padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.2px;border:1.5px solid}
+.bdg-green{background:var(--green-p);color:var(--green-t);border-color:var(--green-b)}
+.bdg-red{background:var(--red-p);color:var(--red-t);border-color:var(--red-b)}
+.bdg-amber{background:var(--warn-p);color:var(--warn);border-color:var(--warn-b)}
+.bdg-blue{background:var(--blue-p);color:var(--blue-t);border-color:var(--blue-b)}
+.bdg-pink{background:var(--pink-p);color:var(--pink-t);border-color:var(--pink-b)}
+.bdg-lav{background:var(--lav-p);color:var(--lav-t);border-color:var(--lav-b)}
+.bdg-sky{background:var(--sky-p);color:var(--sky-t);border-color:var(--sky-b)}
+.bdg-gray{background:var(--surface2);color:var(--text2);border-color:var(--border2)}
+
+/* AGE CHIPS */
+.achip{display:inline-flex;align-items:center;gap:4px;border-radius:var(--rf);padding:3px 9px;font-size:10.5px;font-weight:800;border:1.5px solid}
+.a-child{background:#fff5f8;color:#b02860;border-color:#f5b0cc}
+.a-pre{background:#f0f3ff;color:#2040b0;border-color:#a8b8f8}
+.a-teen{background:#f0fbf4;color:#186038;border-color:#90d8a8}
+.a-adult{background:#f8f0ff;color:#5820a0;border-color:#c898e8}
+.a-unk{background:var(--surface2);color:var(--text3);border-color:var(--border)}
+
+/* STATS */
+.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.sc{border-radius:var(--r18);padding:17px 16px;border:1.5px solid;position:relative;overflow:hidden}
+.sc::after{content:'';position:absolute;bottom:-18px;right:-18px;width:70px;height:70px;border-radius:50%;opacity:.12}
+.sc-pink{background:linear-gradient(135deg,#fff,var(--pink-p));border-color:var(--pink-b)}.sc-pink::after{background:var(--pink-t)}.sc-pink .sv{color:var(--pink-t)}
+.sc-green{background:linear-gradient(135deg,#fff,var(--green-p));border-color:var(--green-b)}.sc-green::after{background:var(--green-t)}.sc-green .sv{color:var(--green-t)}
+.sc-blue{background:linear-gradient(135deg,#fff,var(--blue-p));border-color:var(--blue-b)}.sc-blue::after{background:var(--blue-t)}.sc-blue .sv{color:var(--blue-t)}
+.sc-lav{background:linear-gradient(135deg,#fff,var(--lav-p));border-color:var(--lav-b)}.sc-lav::after{background:var(--lav-t)}.sc-lav .sv{color:var(--lav-t)}
+.sc-peach{background:linear-gradient(135deg,#fff,var(--peach-p));border-color:var(--peach-b)}.sc-peach::after{background:var(--peach-t)}.sc-peach .sv{color:var(--peach-t)}
+.sc-sky{background:linear-gradient(135deg,#fff,var(--sky-p));border-color:var(--sky-b)}.sc-sky::after{background:var(--sky-t)}.sc-sky .sv{color:var(--sky-t)}
+.si{font-size:20px;margin-bottom:8px;position:relative;z-index:1}
+.sv{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;position:relative;z-index:1}
+.sl{font-size:10.5px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;position:relative;z-index:1}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:var(--r14);border:1.5px solid var(--border);box-shadow:var(--sh1)}
+table{width:100%;border-collapse:collapse}
+thead{background:linear-gradient(135deg,#f6f8fe,#f0f4fe)}
+th{padding:11px 14px;text-align:left;font-size:10.5px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;border-bottom:1.5px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:.12s}
+th:hover{background:rgba(74,120,240,.06);color:var(--acc)}
+th .sort-ic{margin-left:4px;opacity:.4;font-size:10px}
+th.sort-asc .sort-ic{opacity:1;color:var(--acc)}
+th.sort-desc .sort-ic{opacity:1;color:var(--acc)}
+td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:.1s}
+tbody tr:hover{background:linear-gradient(90deg,var(--blue-p),transparent)}
+tbody tr:hover td:first-child{border-left:3px solid var(--acc)}
+
+/* CHECK ITEMS */
+.ci{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r14);
+  border:1.5px solid var(--border);background:var(--surface);transition:.14s;cursor:pointer;margin-bottom:6px}
+.ci:hover{border-color:var(--acc-b);box-shadow:var(--sh1)}
+.ci.ck{border-color:var(--blue-b);background:linear-gradient(135deg,#fff,var(--blue-p))}
+.ci.pres{border-color:var(--green-b);background:linear-gradient(135deg,#fff,var(--green-p))}
+.cbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s;background:var(--surface)}
+.cbox.on{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:var(--acc);box-shadow:0 2px 8px rgba(74,120,240,.3)}
+.cbox.on-g{background:linear-gradient(135deg,#28a05f,#1e7a48);border-color:#28a05f;box-shadow:0 2px 8px rgba(40,160,95,.3)}
+.cbox .ck-ic{color:#fff;font-size:12px;font-weight:900;line-height:1}
+
+/* MASS CHIPS */
+.mchip{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);
+  padding:8px 15px;font-size:12.5px;font-weight:700;color:var(--text2);cursor:pointer;
+  transition:.15s;display:flex;align-items:center;gap:8px}
+.mchip:hover{border-color:var(--acc-b);background:var(--acc-p)}
+.mchip.on{background:linear-gradient(135deg,var(--acc-p),#e0eaff);border-color:var(--acc);color:var(--acc);box-shadow:0 2px 10px rgba(74,120,240,.15)}
+.mcnt{background:var(--acc);color:#fff;border-radius:var(--rf);padding:2px 8px;font-size:10.5px;font-weight:800}
+
+/* PROGRESS */
+.pbar{height:6px;background:var(--border);border-radius:var(--rf);overflow:hidden;min-width:60px}
+.pfill{height:100%;border-radius:var(--rf);transition:width .4s ease}
+
+/* STEPS */
+.steps{display:flex;align-items:center;gap:8px;margin-bottom:20px;
+  background:linear-gradient(135deg,#f6f8fe,#f0f4fe);border:1.5px solid var(--blue-b);
+  border-radius:var(--r14);padding:12px 16px}
+.step{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--text3)}
+.step.on{color:var(--acc)}
+.step.done{color:var(--green-t)}
+.snum{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.step.on .snum{border-color:var(--acc);background:var(--acc-p);color:var(--acc)}
+.step.done .snum{border-color:var(--green-t);background:var(--green-p);color:var(--green-t)}
+.sdiv{height:2px;flex:1;background:var(--border);border-radius:var(--rf)}
+
+/* SUB TABS */
+.stabs{display:flex;gap:4px;background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:var(--r14);padding:4px;margin-bottom:16px}
+.stab{flex:1;border:none;background:none;border-radius:var(--r10);padding:8px 5px;
+  font-size:11.5px;font-weight:800;color:var(--text3);cursor:pointer;transition:.15s;white-space:nowrap}
+.stab.on{background:linear-gradient(135deg,#fff,var(--blue-p));color:var(--acc);
+  box-shadow:var(--sh2);border:1px solid var(--acc-b)}
+.stab:hover:not(.on){color:var(--text2);background:rgba(255,255,255,.7)}
+
+/* AGE FILTER BAR */
+.afbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.afbtn{display:flex;align-items:center;gap:5px;border-radius:var(--rf);
+  padding:5px 12px;font-size:11px;font-weight:800;border:1.5px solid;cursor:pointer;
+  transition:.14s;background:var(--surface);letter-spacing:.1px}
+.afbtn.af-all{border-color:var(--border2);color:var(--text2)}
+.afbtn.af-all.on{background:var(--text);color:#fff;border-color:var(--text)}
+.afbtn.af-child{border-color:#f5b0cc;color:#b02860}
+.afbtn.af-child.on{background:#b02860;color:#fff}
+.afbtn.af-pre{border-color:#a8b8f8;color:#2040b0}
+.afbtn.af-pre.on{background:#2040b0;color:#fff}
+.afbtn.af-teen{border-color:#90d8a8;color:#186038}
+.afbtn.af-teen.on{background:#186038;color:#fff}
+.afbtn.af-adult{border-color:#c898e8;color:#5820a0}
+.afbtn.af-adult.on{background:#5820a0;color:#fff}
+
+/* AGE SECTION HEADERS */
+.ash{display:flex;align-items:center;gap:10px;margin:18px 0 10px;
+  padding:10px 16px;border-radius:var(--r10);border-left:4px solid}
+.ash.child{background:var(--pink-p);border-color:var(--pink-t)}
+.ash.pre{background:var(--blue-p);border-color:var(--blue-t)}
+.ash.teen{background:var(--green-p);border-color:var(--green-t)}
+.ash.adult{background:var(--lav-p);border-color:var(--lav-t)}
+.ash-title{font-weight:800;font-size:13.5px}
+.ash-cnt{font-size:11.5px;color:var(--text3);margin-left:auto;font-weight:700}
+
+/* PROFILE */
+.prof-hero{
+  background:linear-gradient(135deg,#fff5f8 0%,#f5f0ff 50%,#f0f8ff 100%);
+  border:1.5px solid var(--pink-b);border-radius:var(--r24);
+  padding:28px 20px;text-align:center;margin-bottom:18px;box-shadow:var(--sh2);
+}
+.avatar{width:74px;height:74px;border-radius:50%;margin:0 auto 12px;
+  background:linear-gradient(135deg,#5070ee,#8848d8,#c050a8);
+  color:#fff;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 22px rgba(80,112,238,.35);}
+.prof-name{font-family:var(--ffs);font-size:22px;color:var(--text)}
+.prof-id{font-size:10.5px;color:var(--text3);margin-top:5px;letter-spacing:.4px}
+
+/* EXPORT CARDS */
+.xcard{display:flex;align-items:center;gap:16px;padding:17px;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:var(--r18);box-shadow:var(--sh1);
+  cursor:pointer;transition:.15s;margin-bottom:10px}
+.xcard:hover{border-color:var(--acc-b);background:linear-gradient(135deg,#fff,var(--blue-p));box-shadow:var(--sh3);transform:translateY(-1px)}
+.xic{width:48px;height:48px;border-radius:var(--r14);background:linear-gradient(135deg,var(--acc-p),var(--blue-p));
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+
+/* AUDIT */
+.arow{display:flex;gap:11px;padding:10px 14px;border-radius:var(--r10);
+  background:var(--surface);border:1.5px solid var(--border);margin-bottom:5px;align-items:flex-start}
+.aact{font-weight:800;color:var(--acc);font-size:11.5px;flex-shrink:0;width:110px}
+.adtl{font-size:11.5px;color:var(--text2);flex:1}
+.ats{font-size:10.5px;color:var(--text3);flex-shrink:0}
+
+/* SECTION LABEL */
+.slbl{font-size:10.5px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.sec-banner{font-size:12.5px;font-weight:700;border-radius:var(--r10);padding:9px 14px;margin:16px 0 12px;border:1.5px solid}
+.sec-blue{background:var(--blue-p);border-color:var(--blue-b);color:var(--blue-t)}
+.sec-green{background:var(--green-p);border-color:var(--green-b);color:var(--green-t)}
+.sec-pink{background:var(--pink-p);border-color:var(--pink-b);color:var(--pink-t)}
+.sec-lav{background:var(--lav-p);border-color:var(--lav-b);color:var(--lav-t)}
+
+/* UTILS */
+.divider{border:none;border-top:1.5px solid var(--border);margin:17px 0}
+.empty{text-align:center;padding:38px 20px;color:var(--text3)}
+.empty-i{font-size:38px;margin-bottom:10px}
+.tsub{font-size:11.5px;color:var(--text3);margin-top:3px}
+.f{display:flex}.g2{gap:8px}.g3{gap:12px}.ic{align-items:center}.jb{justify-content:space-between}
+.f1{flex:1}.mt1{margin-top:6px}.mt2{margin-top:10px}.mt3{margin-top:14px}.mt4{margin-top:18px}
+.mb2{margin-bottom:10px}.mb3{margin-bottom:14px}
+.wf{width:100%}.fb{font-weight:700}
+.chip{display:inline-flex;align-items:center;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r6);padding:4px 10px;font-size:11.5px;color:var(--text2);margin:3px}
+.prev-wrap{max-height:260px;overflow-y:auto;border-radius:var(--r10);border:1.5px solid var(--border)}
+.alert{border-radius:var(--r14);padding:13px;margin-bottom:14px;border:1.5px solid}
+.alert-warn{background:var(--warn-p);border-color:var(--warn-b);color:var(--warn)}
+.alert-err{background:var(--red-p);border-color:var(--red-b);color:var(--red-t)}
+.alert-info{background:var(--blue-p);border-color:var(--blue-b);color:var(--blue-t)}
+.alert-succ{background:var(--green-p);border-color:var(--green-b);color:var(--green-t)}
+.at{font-weight:800;margin-bottom:4px;font-size:12.5px}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(20,28,50,.52);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px);animation:fi .15s ease}
+.mdl{background:var(--surface);border-radius:var(--r24);box-shadow:var(--sh4);width:100%;max-width:430px;border:1.5px solid var(--border);animation:su .2s ease;overflow:hidden}
+.mdl-hd{padding:20px 22px 16px;background:linear-gradient(135deg,var(--red-p),#fff);border-bottom:1.5px solid var(--red-b)}
+.mdl-title{font-family:var(--ffs);font-size:18px;color:var(--red-t)}
+.mdl-sub{font-size:12.5px;color:var(--text2);margin-top:4px;line-height:1.5}
+.mdl-body{padding:20px 22px}
+.mdl-ft{padding:14px 22px;background:var(--surface2);border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end}
+
+/* HOLD TO DELETE */
+.hold-btn{position:relative;overflow:hidden;border-radius:var(--r14);
+  background:var(--red-p);border:1.5px solid var(--red-b);color:var(--red-t);
+  font-weight:800;font-size:13px;padding:12px 20px;cursor:pointer;user-select:none;
+  touch-action:none;display:flex;align-items:center;gap:8px;width:100%;justify-content:center;
+  transition:border-color .15s;letter-spacing:.1px}
+.hold-btn:hover{border-color:var(--red-t)}
+.hold-prog{position:absolute;left:0;top:0;height:100%;width:0%;border-radius:var(--r14);
+  background:linear-gradient(90deg,rgba(216,48,48,.2),rgba(216,48,48,.38));pointer-events:none}
+.hold-prog.fill{transition:width 5s linear}
+.hold-lbl{position:relative;z-index:1}
+.hold-status{text-align:center;font-size:11.5px;color:var(--text3);margin-top:8px;min-height:18px;font-weight:600}
+
+/* TOAST */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+  color:#fff;padding:11px 22px;border-radius:var(--rf);font-size:13px;font-weight:700;
+  z-index:9999;box-shadow:var(--sh4);display:none;white-space:nowrap;animation:su .2s ease;
+  backdrop-filter:blur(8px);}
+#toast.success{background:linear-gradient(135deg,#28a05f,#1e7a48)}
+#toast.error{background:linear-gradient(135deg,#d83030,#b02020)}
+#toast.info{background:linear-gradient(135deg,var(--acc),var(--acc2))}
+
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes su{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media(max-width:680px){
+  .hdr-top{padding:11px 14px}
+  .srch input{width:140px}.srch input:focus{width:170px}
+  main{padding:18px 13px 60px}
+  .srow{grid-template-columns:1fr 1fr}
+  .fgrid{grid-template-columns:1fr}.span2{grid-column:1}
+  .nav{padding:0 8px}.nvb{padding:9px 11px;font-size:11.5px}
+  .pg-title{font-size:19px}.card{padding:16px}
+}
+@media(max-width:420px){
+  .srch{display:none}.mob-srch{display:block!important;padding:0 14px 10px}
+  .srow{grid-template-columns:1fr 1fr}
+}
+.mob-srch{display:none}
+</style>
+</head>
+<body>
+<div id="app" style="display:flex;flex-direction:column;min-height:100vh">
+  <header id="hdr">
+    <div class="hdr-top">
+      <div class="logo">✝</div>
+      <div>
+        <div class="brand-name">Pavaratty Parish</div>
+        <div class="brand-sub">Altar Boys Management</div>
+      </div>
+      <div class="hdr-right">
+        <div class="srch">
+          <span class="srch-ic">🔍</span>
+          <input type="text" id="gSearch" placeholder="Search… (press Enter)" onkeydown="if(event.key==='Enter'){gSearchFn(this.value)}" style="padding-right:70px"/>
+          <button onclick="gSearchFn(document.getElementById('gSearch').value)" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:var(--acc);color:#fff;border:none;border-radius:var(--r6);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="mob-srch"><div style="display:flex;gap:6px;width:100%">
+  <input type="text" id="gSearch2" placeholder="🔍 Search… (press Enter)" onkeydown="if(event.key==='Enter'){gSearchFn(this.value)}" style="flex:1;border:1.5px solid var(--border);border-radius:var(--rf);padding:8px 14px;font-size:12.5px;outline:none;background:var(--surface2)"/>
+  <button onclick="gSearchFn(document.getElementById('gSearch2').value)" style="background:var(--acc);color:#fff;border:none;border-radius:var(--r10);padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0">Search</button>
+</div></div>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+</style>
+</head>
+<body>
+<div id="app" style="display:flex;flex-direction:column;min-height:100vh">
+  <header id="hdr">
+    <div class="hdr-top">
+      <div class="logo">✝</div>
+      <div>
+        <div class="brand-name">Pavaratty Parish</div>
+        <div class="brand-sub">Altar Boys Management</div>
+      </div>
+      <div class="hdr-right">
+        <div class="srch">
+          <span class="srch-ic">🔍</span>
+          <input type="text" id="gSearch" placeholder="Search… (press Enter)" onkeydown="if(event.key==='Enter'){gSearchFn(this.value)}" style="padding-right:70px"/>
+          <button onclick="gSearchFn(document.getElementById('gSearch').value)" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:var(--acc);color:#fff;border:none;border-radius:var(--r6);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="mob-srch">
+      <div style="display:flex;gap:6px;width:100%">
+        <input type="text" id="gSearch2" placeholder="🔍 Search… (press Enter)" onkeydown="if(event.key==='Enter'){gSearchFn(this.value)}" style="flex:1;border:1.5px solid var(--border);border-radius:var(--rf);padding:8px 14px;font-size:12.5px;outline:none;background:var(--surface2)"/>
+        <button onclick="gSearchFn(document.getElementById('gSearch2').value)" style="background:var(--acc);color:#fff;border:none;border-radius:var(--r10);padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0">Search</button>
+      </div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </header>
+  <main id="main" style="flex:1;max-width:1120px;margin:0 auto;padding:26px 22px 60px;width:100%"></main>
+</div>
+<div id="toast" style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);color:#fff;padding:11px 22px;border-radius:9999px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 16px 48px rgba(26,32,53,.14);display:none;white-space:nowrap"></div>
+<div id="delModal" style="display:none"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   PAVARATTY PARISH — Firebase Compat Edition (truly global, no modules)
+   ════════════════════════════════════════════════════════════════════════
+   This version uses Firebase Compat SDK loaded via <script> tags above.
+   All firebase.* calls are global. No import/export. No type="module".
+   This means ALL functions are automatically global — no window.* needed.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── YOUR FIREBASE CONFIG ─────────────────────────────────────────────── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyCCrW-nnY5cSKqnT8FTmMR1uofDatl30eI",
+  authDomain:        "pavaratty-parish.firebaseapp.com",
+  databaseURL:       "https://pavaratty-parish-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "pavaratty-parish",
+  storageBucket:     "pavaratty-parish.firebasestorage.app",
+  messagingSenderId: "840747618220",
+  appId:             "1:840747618220:web:7d87ac34b470d420adb409"
+};
+
+/* ── INIT FIREBASE ────────────────────────────────────────────────────── */
+firebase.initializeApp(firebaseConfig);
+const AUTH = firebase.auth();
+const DB   = firebase.database();
+
+/* ── CORE HELPERS ────────────────────────────────────────────────────── */
+const uid   = ()=>"x"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const esc   = s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const fmt12 = t=>{const[h,m]=t.split(":").map(Number);return`${h%12||12}:${String(m).padStart(2,"0")} ${h<12?"AM":"PM"}`};
+const pct   = (p,t)=>t?Math.round(p/t*100):0;
+
+const SCHED={Sunday:["05:30","07:30","10:00","17:00","19:00"],Monday:["05:30","07:30","19:00"],Tuesday:["05:30","07:30","19:00"],Wednesday:["05:00","07:00","08:15","17:00","19:00"],Thursday:["05:30","07:30","19:00"],Friday:["05:30","07:30","19:00"],Saturday:["05:30","07:30","19:00"]};
+const DAYS =["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function getAge(dob){if(!dob)return null;const b=new Date(dob),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a}
+function ageGrp(dob){const a=getAge(dob);if(a===null)return"unk";if(a<=9)return"child";if(a<=12)return"pre";if(a<=17)return"teen";return"adult"}
+function ageGrpLabel(g){return{child:"Children (≤9 yrs)",pre:"Pre-teens (10–12 yrs)",teen:"Teenagers (13–17 yrs)",adult:"Adults / Senior (18+)",unk:"Age Unknown"}[g]||g}
+function achip(dob){const a=getAge(dob),g=ageGrp(dob);const cls={child:"a-child",pre:"a-pre",teen:"a-teen",adult:"a-adult",unk:"a-unk"}[g];const ic={child:"🌱",pre:"📘",teen:"🌟",adult:"🎓",unk:"❓"}[g];return`<span class="achip ${cls}">${ic} ${a!==null?a+" yrs":ageGrpLabel(g)}</span>`}
+
+const SEED=[
+  {id:"c001",name:"Alen Thomas",fatherName:"Thomas Mathew",fatherOccupation:"Engineer",motherName:"Suja Thomas",motherOccupation:"Teacher",phone1:"9876543210",phone2:"",fatherTime:"Morning",dob:"2010-03-15",class:"8",section:"A",houseName:"Mathew House",wardName:"Ward 1",district:"Thrissur",state:"Kerala",country:"India",email:"",emergencyContact:"",bloodGroup:"O+",baptismDate:"2010-07-10",confirmationDate:"",medicalInfo:"",extraCurricular:"",status:"Active",notes:"",joinedDate:"2022-01-15",createdAt:new Date().toISOString()},
+  {id:"c002",name:"Bibin Joseph",fatherName:"Joseph Kurian",fatherOccupation:"Driver",motherName:"Mini Joseph",motherOccupation:"Nurse",phone1:"9876543211",phone2:"9876543212",fatherTime:"Evening",dob:"2011-06-22",class:"7",section:"B",houseName:"Joseph House",wardName:"Ward 2",district:"Thrissur",state:"Kerala",country:"India",email:"",emergencyContact:"9876543212",bloodGroup:"A+",baptismDate:"2011-10-05",confirmationDate:"",medicalInfo:"",extraCurricular:"Choir",status:"Active",notes:"",joinedDate:"2022-03-10",createdAt:new Date().toISOString()},
+  {id:"c003",name:"Cibu Mathew",fatherName:"Mathew Varghese",fatherOccupation:"Farmer",motherName:"Lisy Mathew",motherOccupation:"Homemaker",phone1:"9876543213",phone2:"",fatherTime:"Morning",dob:"2009-11-08",class:"9",section:"A",houseName:"Varghese House",wardName:"Ward 1",district:"Thrissur",state:"Kerala",country:"India",email:"",emergencyContact:"",bloodGroup:"B+",baptismDate:"2009-12-20",confirmationDate:"2022-05-01",medicalInfo:"",extraCurricular:"",status:"Active",notes:"",joinedDate:"2021-06-01",createdAt:new Date().toISOString()},
+  {id:"c004",name:"Davis George",fatherName:"George Philip",fatherOccupation:"Businessman",motherName:"Sheela George",motherOccupation:"Teacher",phone1:"9876543214",phone2:"",fatherTime:"Morning",dob:"2012-01-30",class:"6",section:"C",houseName:"Philip House",wardName:"Ward 3",district:"Thrissur",state:"Kerala",country:"India",email:"",emergencyContact:"",bloodGroup:"AB+",baptismDate:"2012-03-18",confirmationDate:"",medicalInfo:"None",extraCurricular:"Football",status:"Active",notes:"",joinedDate:"2023-01-08",createdAt:new Date().toISOString()},
+  {id:"c005",name:"Edwin Paul",fatherName:"Paul Antony",fatherOccupation:"Police",motherName:"Alice Paul",motherOccupation:"Nurse",phone1:"9876543215",phone2:"9876543216",fatherTime:"Evening",dob:"2007-08-14",class:"10",section:"A",houseName:"Antony House",wardName:"Ward 2",district:"Thrissur",state:"Kerala",country:"India",email:"edwin@email.com",emergencyContact:"9876543216",bloodGroup:"O-",baptismDate:"2007-09-30",confirmationDate:"2020-04-12",medicalInfo:"Asthma",extraCurricular:"Music",status:"Inactive",notes:"Moved abroad",joinedDate:"2020-09-01",createdAt:new Date().toISOString()},
+];
+
+/* ── GLOBAL STATE ────────────────────────────────────────────────────── */
+var D = {tab:"info", ch:[], asgn:[], att:[], log:[], headAsgn:{}, gs:""};
+var _loading = true;
+var _listeners = [];
+var _rbTimer = null;
+
+/* ── FIREBASE DATA LAYER ─────────────────────────────────────────────── */
+/* Clean data before writing — Firebase rejects undefined, null becomes "" */
+function cleanForFirebase(v) {
+  if (v === null || v === undefined) return "";
+  if (typeof v !== "object") return v;
+  if (Array.isArray(v)) return v.map(cleanForFirebase);
+  var out = {};
+  Object.keys(v).forEach(function(k) {
+    var val = v[k];
+    if (k === "_extraFields") return; // skip — causes Firebase issues
+    if (val === undefined || val === null) { out[k] = ""; return; }
+    if (typeof val === "object" && !Array.isArray(val) && Object.keys(val).length === 0) return; // skip empty objects
+    out[k] = cleanForFirebase(val);
+  });
+  return out;
+}
+
+function toObj(arr) {
+  if (!arr || !arr.length) return {};
+  var out = {};
+  arr.forEach(function(x){ if(x && x.id) out[x.id] = x; });
+  return out;
+}
+
+function fbSet(path, data) {
+  return DB.ref(path).set(cleanForFirebase(data))
+    .catch(function(e){ toast("Save error: "+e.message,"error"); throw e; });
+}
+
+function persist() {
+  function cleanArr(arr) {
+    var out = {};
+    (arr || []).forEach(function(x) {
+      if (!x || !x.id) return;
+      var rec = {};
+      Object.keys(x).forEach(function(k) {
+        var v = x[k];
+        if (v === undefined || v === null) { rec[k] = ''; return; }
+        if (typeof v === 'object' && !Array.isArray(v)) return;
+        rec[k] = v;
+      });
+      out[x.id] = rec;
+    });
+    return out;
+  }
+  return Promise.all([
+    DB.ref('children').set(cleanArr(D.ch)),
+    DB.ref('assignments').set(cleanArr(D.asgn)),
+    DB.ref('attendance').set(cleanArr(D.att)),
+    DB.ref('headAsgn').set(D.headAsgn || null),
+  ]).catch(function(e) {
+    toast('Save error: ' + e.message, 'error');
+    throw e;
+  });
+}
+function auditLog(action, detail) {
+  var e = {id:uid(), ts:new Date().toISOString(), action:action, detail:detail};
+  D.log = [e].concat(D.log.slice(0,299));
+  DB.ref("auditLog/"+e.id).set(e).catch(function(){});
+}
+// alias
+function audit(action, detail){ auditLog(action, detail); }
+
+/* ── REAL-TIME LISTENERS ─────────────────────────────────────────────── */
+function debouncedRb() {
+  clearTimeout(_rbTimer);
+  _rbTimer = setTimeout(function(){ if(!_loading) rb(); }, 120);
+}
+
+function startListeners() {
+  var chRef   = DB.ref("children");
+  var asRef   = DB.ref("assignments");
+  var atRef   = DB.ref("attendance");
+  var hdRef   = DB.ref("headAsgn");
+  var logRef  = DB.ref("auditLog");
+
+  chRef.on("value",  function(s){ D.ch      = s.val() ? Object.values(s.val()) : [];        debouncedRb(); });
+  asRef.on("value",  function(s){ D.asgn    = s.val() ? Object.values(s.val()) : [];        debouncedRb(); });
+  atRef.on("value",  function(s){ D.att     = s.val() ? Object.values(s.val()) : [];        debouncedRb(); });
+  hdRef.on("value",  function(s){ D.headAsgn = s.val() || {};                               debouncedRb(); });
+  logRef.on("value", function(s){
+    D.log = s.val() ? Object.values(s.val()).sort(function(a,b){return b.ts.localeCompare(a.ts);}) : [];
+    debouncedRb();
+  });
+
+  _listeners = [chRef, asRef, atRef, hdRef, logRef];
+}
+
+function stopListeners() {
+  _listeners.forEach(function(r){ r.off(); });
+  _listeners = [];
+}
+
+function initData() {
+  showLoading();
+  Promise.all([
+    DB.ref("children").once("value"),
+    DB.ref("assignments").once("value"),
+    DB.ref("attendance").once("value"),
+    DB.ref("auditLog").once("value"),
+    DB.ref("headAsgn").once("value"),
+  ]).then(function(snaps) {
+    var cs=snaps[0], as=snaps[1], ats=snaps[2], ls=snaps[3], hs=snaps[4];
+
+    D.ch      = cs.val()  ? Object.values(cs.val())  : SEED.map(function(x){return Object.assign({},x);});
+    D.asgn    = as.val()  ? Object.values(as.val())  : [];
+    D.att     = ats.val() ? Object.values(ats.val()) : [];
+    D.log     = ls.val()  ? Object.values(ls.val()).sort(function(a,b){return b.ts.localeCompare(a.ts);}) : [];
+    D.headAsgn = hs.val() || {};
+
+    // Seed the DB if brand new
+    if (!cs.val()) {
+      fbSet("children", toObj(D.ch)).then(function(){
+        toast("Parish database ready ✓","info");
+      });
+    }
+
+    _loading = false;
+    startListeners();
+    hideLoading();
+    rb();
+  }).catch(function(e) {
+    _loading = false;
+    hideLoading();
+    showDbError(e.message);
+  });
+}
+
+/* ── AUTH ─────────────────────────────────────────────────────────────── */
+function showLoginScreen() {
+  document.getElementById("main").innerHTML = `
+    <div style="max-width:410px;margin:60px auto;padding:0 14px">
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:var(--r24);box-shadow:var(--sh4);overflow:hidden">
+        <div style="background:linear-gradient(135deg,#5070ee 0%,#8848d8 50%,#c050a8 100%);padding:30px 26px;text-align:center">
+          <div style="font-size:44px;margin-bottom:10px">✝</div>
+          <div style="font-family:var(--ffs);font-size:22px;color:#fff">Pavaratty Parish</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:4px;letter-spacing:.8px;text-transform:uppercase">Altar Boys Management</div>
+        </div>
+        <div style="padding:26px">
+          <div id="lgErr" style="display:none;background:var(--red-p);border:1.5px solid var(--red-b);color:var(--red-t);border-radius:var(--r10);padding:10px 13px;margin-bottom:14px;font-size:13px;font-weight:600"></div>
+          <div style="display:flex;flex-direction:column;gap:13px">
+            <div>
+              <label style="font-size:10.5px;font-weight:800;color:var(--text2);letter-spacing:.7px;text-transform:uppercase;display:block;margin-bottom:5px">Email Address</label>
+              <input type="email" id="lgEmail" placeholder="admin@example.com"
+                style="width:100%;border:1.5px solid var(--border);border-radius:var(--r10);padding:10px 13px;font-size:13px;color:var(--text);outline:none"
+                onkeydown="if(event.key==='Enter')doLogin()"/>
+            </div>
+            <div>
+              <label style="font-size:10.5px;font-weight:800;color:var(--text2);letter-spacing:.7px;text-transform:uppercase;display:block;margin-bottom:5px">Password</label>
+              <input type="password" id="lgPass" placeholder="••••••••"
+                style="width:100%;border:1.5px solid var(--border);border-radius:var(--r10);padding:10px 13px;font-size:13px;color:var(--text);outline:none"
+                onkeydown="if(event.key==='Enter')doLogin()"/>
+            </div>
+            <button id="lgBtn" onclick="doLogin()"
+              style="background:linear-gradient(135deg,#5070ee,#2d55d0);color:#fff;border:none;border-radius:var(--r10);padding:12px;font-size:14px;font-weight:800;cursor:pointer">
+              Sign In →
+            </button>
+          </div>
+          <div style="text-align:center;margin-top:16px;font-size:11.5px;color:var(--text3)">
+            Contact your parish administrator for login credentials.
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("nav").innerHTML = "";
+  var badge = document.getElementById("userBadge");
+  if (badge) badge.remove();
+}
+
+function doLogin() {
+  var email = (document.getElementById("lgEmail")||{}).value||"";
+  var pass  = (document.getElementById("lgPass")||{}).value||"";
+  var errEl = document.getElementById("lgErr");
+  var btn   = document.getElementById("lgBtn");
+  email = email.trim();
+  if (!email || !pass) {
+    if (errEl) { errEl.style.display="block"; errEl.textContent="Please enter email and password."; }
+    return;
+  }
+  if (errEl) errEl.style.display="none";
+  if (btn) btn.textContent = "Signing in…";
+  AUTH.signInWithEmailAndPassword(email, pass).catch(function(e) {
+    if (errEl) {
+      errEl.style.display = "block";
+      errEl.textContent = (e.code==="auth/invalid-credential"||e.code==="auth/wrong-password")
+        ? "Incorrect email or password." : e.message;
+    }
+    if (btn) btn.textContent = "Sign In →";
+  });
+}
+
+function doLogout() {
+  _loading = true;
+  D.ch=[]; D.asgn=[]; D.att=[]; D.log=[]; D.headAsgn={};
+  stopListeners();
+  AUTH.signOut();
+}
+
+function showUserBadge(user) {
+  var right = document.querySelector(".hdr-right");
+  if (!right) return;
+  var ex = document.getElementById("userBadge");
+  if (ex) ex.remove();
+  var div = document.createElement("div");
+  div.id = "userBadge";
+  div.style.cssText = "display:flex;align-items:center;gap:8px;flex-shrink:0";
+  div.innerHTML = '<button onclick="doLogout()" style="background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);border-radius:var(--r6);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer">Sign Out</button>';
+  right.appendChild(div);
+}
+
+AUTH.onAuthStateChanged(function(user) {
+  if (user) {
+    showUserBadge(user);
+    rNav();
+    initData();
+  } else {
+    _loading = true;
+    showLoginScreen();
+  }
+});
+
+/* ── TOAST ────────────────────────────────────────────────────────────── */
+var _toastTimer = null;
+function toast(msg, type) {
+  type = type || "success";
+  var t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.style.background = type==="error" ? "linear-gradient(135deg,#d83030,#b02020)"
+    : type==="info" ? "linear-gradient(135deg,#4a78f0,#2d55d0)"
+    : "linear-gradient(135deg,#28a05f,#1e7a48)";
+  t.style.display = "block";
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.style.display="none"; }, 3500);
+}
+
+/* ── LOADING / ERROR ──────────────────────────────────────────────────── */
+function showLoading() {
+  var el = document.getElementById("main");
+  if (el) el.innerHTML = '<div style="text-align:center;padding:80px 20px"><div style="font-size:48px;margin-bottom:16px;display:inline-block;animation:fbspin 1.2s linear infinite">🔄</div><div style="font-family:var(--ffs);font-size:18px;color:var(--text);margin-bottom:6px">Loading parish data…</div><div style="font-size:12.5px;color:var(--text3)">Connecting to Firebase</div></div>';
+  var sty = document.createElement("style");
+  sty.textContent = "@keyframes fbspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}";
+  document.head.appendChild(sty);
+}
+function hideLoading() {}
+function showDbError(msg) {
+  var el = document.getElementById("main");
+  if (el) el.innerHTML = '<div style="max-width:500px;margin:50px auto;padding:0 14px"><div style="background:#fff;border:1.5px solid var(--red-b);border-radius:var(--r18);padding:28px;box-shadow:var(--sh3)"><div style="font-size:40px;text-align:center;margin-bottom:14px">⚠️</div><div style="font-family:var(--ffs);font-size:18px;color:var(--red-t);text-align:center;margin-bottom:12px">Database Error</div><div style="background:var(--surface2);border-radius:var(--r10);padding:11px;font-size:11px;color:var(--red-t);font-family:monospace;word-break:break-all">'+msg+'</div><div style="margin-top:14px;font-size:12px;color:var(--text3);text-align:center">Check Firebase rules: set read+write to auth!=null</div></div></div>';
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   APP JS — all functions below are 100% global (no module scope)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const TABS=[{id:"info",lbl:"Information",ic:"👤"},{id:"asgn",lbl:"Mass Assignment",ic:"⛪"},{id:"att",lbl:"Attendance",ic:"✅"},{id:"rpt",lbl:"Reports",ic:"📊"},{id:"data",lbl:"Data",ic:"💾"}];
+function rNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="nvb${D.tab===t.id?" on":""}" onclick="go('${t.id}')"><div class="nvb-dot"></div>${t.ic} ${t.lbl}</button>`).join("")}
+function go(id){D.tab=id;rNav();rb()}
+function gSearchFn(v){
+  D.gs=v.trim();
+  ["gSearch","gSearch2"].forEach(function(id){var el=document.getElementById(id);if(el&&el!==document.activeElement)el.value=v;});
+  if(D.tab==="info")rb();
+}
+function rb(){
+  if(_loading)return;
+  var el=document.getElementById("main");
+  if(!el)return;
+  if(D.tab==="info")el.innerHTML=rInfo();
+  else if(D.tab==="asgn")el.innerHTML=rAsgn();
+  else if(D.tab==="att"){el.innerHTML=rAtt();bAtt();}
+  else if(D.tab==="rpt")el.innerHTML=rRpt();
+  else if(D.tab==="data"){el.innerHTML=rData();bData();}
+}
+
+function rNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="nvb${D.tab===t.id?" on":""}" onclick="go('${t.id}')"><div class="nvb-dot"></div>${t.ic} ${t.lbl}</button>`).join("")}
+function go(id){D.tab=id;rNav();rb()}
+function gSearchFn(v){
+  D.gs=v.trim();
+  // Sync both search inputs without re-rendering (prevents cursor reset)
+  ["gSearch","gSearch2"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el!==document.activeElement)el.value=v;
+  });
+  if(D.tab==="info")rb();
+}
+function rb(){
+  if(_loading)return; // Don't render until data is loaded from Firebase
+  const el=document.getElementById("main");
+  if(!el)return;
+  if(D.tab==="info")el.innerHTML=rInfo();
+  else if(D.tab==="asgn")el.innerHTML=rAsgn();
+  else if(D.tab==="att"){el.innerHTML=rAtt();bAtt();}
+  else if(D.tab==="rpt")el.innerHTML=rRpt();
+  else if(D.tab==="data"){el.innerHTML=rData();bData();}
+}
+
+/* ═══════ SORT HELPER ═══════ */
+let iSort={col:null,dir:1};
+function srtBy(col){if(iSort.col===col)iSort.dir*=-1;else{iSort.col=col;iSort.dir=1}rb()}
+function sortChildren(list){
+  if(!iSort.col)return list;
+  return[...list].sort((a,b)=>{
+    let av=a[iSort.col]||"",bv=b[iSort.col]||"";
+    if(iSort.col==="dob"||iSort.col==="joinedDate"){av=av?new Date(av).getTime():0;bv=bv?new Date(bv).getTime():0;return(av-bv)*iSort.dir}
+    if(iSort.col==="age"){av=getAge(a.dob)||999;bv=getAge(b.dob)||999;return(av-bv)*iSort.dir}
+    return String(av).localeCompare(String(bv))*iSort.dir;
+  });
+}
+function sic(col){if(iSort.col!==col)return`<span class="sort-ic">↕</span>`;return`<span class="sort-ic">${iSort.dir===1?"↑":"↓"}</span>`}
+function thCls(col){return iSort.col===col?(iSort.dir===1?"sort-asc":"sort-desc"):""}
+
+/* ═══════ STATUS BADGE ═══════ */
+function sbdg(s){return{Active:"bdg-green",Inactive:"bdg-amber",Retired:"bdg-blue",Archived:"bdg-gray"}[s]||"bdg-gray"}
+
+/* ═══════ INFORMATION MODULE ═══════ */
+let iV="list",iSel=null,iSrch="",iStat="All",iAF="all";
+
+function rInfo(){if(iV==="add"||iV==="edit")return rForm();if(iV==="prof"&&iSel)return rProf();return rList()}
+
+function rList(){
+  const q=(D.gs||iSrch).toLowerCase();
+  let list=D.ch.filter(c=>{
+    const m=!q||[c.name,c.fatherName,c.motherName,c.phone1,c.phone2,c.class,c.houseName,c.wardName,c.section,c.notes,c.bloodGroup,c.email,c.district].some(f=>(f||"").toLowerCase().includes(q));
+    return m&&(iStat==="All"||c.status===iStat);
+  });
+  if(iAF!=="all")list=list.filter(c=>ageGrp(c.dob)===iAF);
+  list=sortChildren(list);
+  const STATS=["All","Active","Inactive","Retired","Archived"];
+  return`<div>
+    <div class="hero">
+      <div class="ph-row">
+        <div><div class="pg-title">Children Records</div><div class="pg-sub">${list.length} of ${D.ch.length} records · ${D.ch.filter(c=>c.status==="Active").length} active</div></div>
+        <button class="btn btn-primary" onclick="iV='add';iSel=null;rb()">+ Add Child</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="fg f1" style="display:flex;gap:6px;align-items:center">
+        <input type="text" id="iSrchBox" placeholder="Search name, parent, phone, ward… (press Enter)" value="${esc(iSrch)}"
+          onkeydown="if(event.key==='Enter'){iSrch=this.value;rb()}"
+          style="flex:1;border:1.5px solid var(--border);border-radius:var(--r10);padding:9.5px 12px;font-size:13px;color:var(--text);outline:none;transition:.15s"/>
+        <button onclick="iSrch=document.getElementById('iSrchBox').value;rb()" 
+          style="background:var(--acc);color:#fff;border:none;border-radius:var(--r10);padding:9.5px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0">
+          🔍 Search
+        </button>
+        ${iSrch?`<button onclick="iSrch='';document.getElementById('iSrchBox').value='';rb()" 
+          style="background:var(--surface);border:1.5px solid var(--border);color:var(--text2);border-radius:var(--r10);padding:9.5px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">
+          ✕ Clear
+        </button>`:""}
+      </div>
+      <div class="fg"><select onchange="iStat=this.value;rb()">${STATS.map(s=>`<option${iStat===s?" selected":""}>${s}</option>`).join("")}</select></div>
+    </div>
+    <div class="afbar">
+      ${[["all","All Ages",""],["child","Children ≤9","🌱"],["pre","Pre-teens","📘"],["teen","Teens","🌟"],["adult","Senior 18+","🎓"]].map(([v,l,ic])=>`<button class="afbtn af-${v}${iAF===v?" on":""}" onclick="iAF='${v}';rb()">${ic?ic+" ":""}${l}</button>`).join("")}
+    </div>
+    ${list.length===0?`<div class="empty"><div class="empty-i">👤</div>No children match your filters.</div>`:`
+    <div class="twrap">
+      <table>
+        <thead><tr>
+          <th class="${thCls("name")}" onclick="srtBy('name')">Name ${sic("name")}</th>
+          <th class="${thCls("age")}" onclick="srtBy('age')">Age ${sic("age")}</th>
+          <th class="${thCls("fatherName")}" onclick="srtBy('fatherName')">Father ${sic("fatherName")}</th>
+          <th>Phone</th>
+          <th class="${thCls("class")}" onclick="srtBy('class')">Class ${sic("class")}</th>
+          <th class="${thCls("houseName")}" onclick="srtBy('houseName')">House ${sic("houseName")}</th>
+          <th class="${thCls("wardName")}" onclick="srtBy('wardName')">Ward ${sic("wardName")}</th>
+          <th class="${thCls("status")}" onclick="srtBy('status')">Status ${sic("status")}</th>
+          <th style="text-align:right">Actions</th>
+        </tr></thead>
+        <tbody>
+          ${list.map(c=>`<tr>
+            <td><div class="fb">${esc(c.name)}</div><div class="tsub">ID: ${c.id}</div></td>
+            <td>${achip(c.dob)}</td>
+            <td><div>${esc(c.fatherName)}</div><div class="tsub">${esc(c.motherName)}</div></td>
+            <td><div>${esc(c.phone1)}</div>${c.phone2?`<div class="tsub">${esc(c.phone2)}</div>`:""}</td>
+            <td><span class="bdg bdg-blue">Cls ${esc(c.class)}${c.section?" "+esc(c.section):""}</span></td>
+            <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.houseName)}</td>
+            <td>${esc(c.wardName)}</td>
+            <td><span class="bdg ${sbdg(c.status)}">${esc(c.status)}</span></td>
+            <td style="text-align:right;white-space:nowrap">
+              <button class="btn btn-ghost btn-sm" onclick="iSel='${c.id}';iV='prof';rb()">View</button>
+              <button class="btn btn-ghost btn-sm" style="margin-left:4px" onclick="iSel='${c.id}';iV='edit';rb()">Edit</button>
+              <button class="btn btn-sm" style="margin-left:4px;background:var(--red-p);border:1.5px solid var(--red-b);color:var(--red-t)" onclick="initDel('${c.id}')">🗑</button>
+            </td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`}
+  </div>`;
+}
+
+function rProf(){
+  const c=D.ch.find(x=>x.id===iSel);if(!c)return`<div class="empty">Not found.</div>`;
+  const ca=D.asgn.filter(a=>a.cid===c.id);
+  const rat=D.att.filter(a=>a.cid===c.id);
+  const pres=rat.filter(a=>a.status==="present").length;
+  const p2=calcPct(pres,rat.length)||0;
+  const mAtt=rat.filter(a=>a.type==="mass"),mtAtt=rat.filter(a=>a.type==="meeting");
+  const mP=mAtt.filter(a=>a.status==="present").length,mtP=mtAtt.filter(a=>a.status==="present").length;
+  const age=getAge(c.dob);
+  function calcPct(p,t){return t?Math.round(p/t*100):0}
+  return`<div>
+    <div class="ph-row mb3">
+      <button class="btn btn-ghost" onclick="iV='list';rb()">← Back to List</button>
+      <div class="f g2">
+        <button class="btn btn-ghost btn-sm" onclick="iSel='${c.id}';iV='edit';rb()">✏️ Edit</button>
+        <button class="btn btn-sm" style="background:var(--red-p);border:1.5px solid var(--red-b);color:var(--red-t)" onclick="initDel('${c.id}')">🗑 Delete</button>
+      </div>
+    </div>
+    <div class="prof-hero">
+      <div class="avatar">${esc(c.name.charAt(0))}</div>
+      <div class="prof-name">${esc(c.name)}</div>
+      <div style="margin-top:9px;display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+        <span class="bdg ${sbdg(c.status)}">${esc(c.status)}</span>
+        ${achip(c.dob)}
+        ${c.bloodGroup?`<span class="bdg bdg-pink">🩸 ${esc(c.bloodGroup)}</span>`:""}
+      </div>
+      <div class="prof-id">ID: ${c.id} · Joined: ${c.joinedDate||"N/A"}</div>
+    </div>
+    <div class="srow">
+      <div class="sc sc-green"><div class="si">✅</div><div class="sv">${pres}</div><div class="sl">Present</div></div>
+      <div class="sc sc-pink"><div class="si">❌</div><div class="sv">${rat.length-pres}</div><div class="sl">Absent</div></div>
+      <div class="sc sc-blue"><div class="si">📊</div><div class="sv">${p2}%</div><div class="sl">Rate</div></div>
+      <div class="sc sc-lav"><div class="si">⛪</div><div class="sv">${ca.length}</div><div class="sl">Assigned</div></div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#fff,var(--blue-p));border-color:var(--blue-b);margin-bottom:14px">
+      <div class="slbl">Personal Information</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        ${prows([["Full Name",c.name],["Date of Birth",c.dob+(age!==null?" (Age "+age+")":"")],["Blood Group",c.bloodGroup],["Email",c.email],["Father's Name",c.fatherName],["Father's Occupation",c.fatherOccupation],["Mother's Name",c.motherName],["Mother's Occupation",c.motherOccupation],["Phone 1",c.phone1],["Phone 2",c.phone2],["Father's Time",c.fatherTime],["Emergency Contact",c.emergencyContact]])}
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#fff,var(--green-p));border-color:var(--green-b);margin-bottom:14px">
+      <div class="slbl">Parish & Location</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        ${prows([["House Name",c.houseName],["Ward Name",c.wardName],["District",c.district],["State",c.state],["Country",c.country],["Baptism Date",c.baptismDate],["Confirmation Date",c.confirmationDate],["Medical Info",c.medicalInfo],["Extra Curricular",c.extraCurricular],["Class / Section",c.class+(c.section?" "+c.section:"")],["Joined Date",c.joinedDate],["Notes",c.notes]])}
+      </div>
+    </div>
+    <div class="card mb3">
+      <div class="slbl">Attendance Overview</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:linear-gradient(135deg,#fff,var(--blue-p));border:1.5px solid var(--blue-b);border-radius:var(--r14);padding:15px;text-align:center">
+          <div style="font-size:26px;font-weight:800;color:var(--blue-t)">${mAtt.length?Math.round(mP/mAtt.length*100):0}%</div>
+          <div class="sl">Mass Attendance</div>
+          <div class="tsub">${mP}/${mAtt.length} sessions</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#fff,var(--green-p));border:1.5px solid var(--green-b);border-radius:var(--r14);padding:15px;text-align:center">
+          <div style="font-size:26px;font-weight:800;color:var(--green-t)">${mtAtt.length?Math.round(mtP/mtAtt.length*100):0}%</div>
+          <div class="sl">Meeting Attendance</div>
+          <div class="tsub">${mtP}/${mtAtt.length} meetings</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="slbl">Mass Assignments</div>
+      ${ca.length===0?`<div class="empty" style="padding:18px">No masses assigned yet.</div>`
+        :ca.map(a=>{
+          const key=a.day+"__"+a.mt;
+          const isHead=D.headAsgn&&D.headAsgn[key]===c.id;
+          return`<span class="chip" style="${isHead?"background:#fff8e6;border-color:#f0c060;":""}">
+            ${isHead?"👑 ":"⛪ "}${esc(a.day)} – ${fmt12(a.mt)}
+            ${isHead?`<span style="margin-left:5px;font-size:10px;font-weight:800;color:#a07000">HEAD</span>`:""}
+          </span>`;
+        }).join("")}
+    </div>
+  </div>`;
+}
+function prows(rows){return rows.filter(([,v])=>v).map(([l,v])=>`<div style="padding:9px 14px;border-bottom:1px solid var(--border)"><div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">${esc(l)}</div><div style="font-size:13px;font-weight:600;margin-top:2px">${esc(v)}</div></div>`).join("")}
+
+function rForm(){
+  const c=iSel?D.ch.find(x=>x.id===iSel):null;
+  const v=k=>esc(c?c[k]||"":"");
+  const STATS=["Active","Inactive","Retired","Archived"];
+  const BGS=["","A+","A-","B+","B-","AB+","AB-","O+","O-"];
+  return`<div>
+    <div class="ph-row mb3">
+      <button class="btn btn-ghost" onclick="iV=iSel?'prof':'list';rb()">← Back</button>
+      <div class="pg-title">${c?"Edit Child Record":"Add New Child"}</div><div></div>
+    </div>
+    <div class="card">
+      <div class="sec-banner sec-blue">🏷 Personal Information</div>
+      <div class="fgrid">
+        <div class="fg span2"><label class="fgl">Full Name *</label><input type="text" id="f_name" value="${v("name")}" placeholder="Enter full name"/></div>
+        <div class="fg"><label class="fgl">Date of Birth</label><input type="date" id="f_dob" value="${v("dob")}"/></div>
+        <div class="fg"><label class="fgl">Blood Group</label><select id="f_bloodGroup">${BGS.map(b=>`<option${v("bloodGroup")===b?" selected":""}>${b}</option>`).join("")}</select></div>
+        <div class="fg"><label class="fgl">Email</label><input type="email" id="f_email" value="${v("email")}"/></div>
+        <div class="fg"><label class="fgl">Emergency Contact</label><input type="tel" id="f_emergencyContact" value="${v("emergencyContact")}"/></div>
+        <div class="fg span2"><label class="fgl">Medical Information</label><input type="text" id="f_medicalInfo" value="${v("medicalInfo")}"/></div>
+      </div>
+      <div class="sec-banner sec-green">👨‍👩‍👦 Family Information</div>
+      <div class="fgrid">
+        <div class="fg"><label class="fgl">Father's Name</label><input type="text" id="f_fatherName" value="${v("fatherName")}"/></div>
+        <div class="fg"><label class="fgl">Father's Occupation</label><input type="text" id="f_fatherOccupation" value="${v("fatherOccupation")}"/></div>
+        <div class="fg"><label class="fgl">Mother's Name</label><input type="text" id="f_motherName" value="${v("motherName")}"/></div>
+        <div class="fg"><label class="fgl">Mother's Occupation</label><input type="text" id="f_motherOccupation" value="${v("motherOccupation")}"/></div>
+        <div class="fg"><label class="fgl">Phone 1</label><input type="tel" id="f_phone1" value="${v("phone1")}"/></div>
+        <div class="fg"><label class="fgl">Phone 2</label><input type="tel" id="f_phone2" value="${v("phone2")}"/></div>
+        <div class="fg"><label class="fgl">Father's Available Time</label><input type="text" id="f_fatherTime" value="${v("fatherTime")}" placeholder="e.g. Morning, Evening"/></div>
+        <div class="fg"><label class="fgl">House Name</label><input type="text" id="f_houseName" value="${v("houseName")}"/></div>
+      </div>
+      <div class="sec-banner sec-pink">📍 Location & Parish</div>
+      <div class="fgrid">
+        <div class="fg"><label class="fgl">Ward Name</label><input type="text" id="f_wardName" value="${v("wardName")}"/></div>
+        <div class="fg"><label class="fgl">District</label><input type="text" id="f_district" value="${v("district")}"/></div>
+        <div class="fg"><label class="fgl">State</label><input type="text" id="f_state" value="${v("state")}"/></div>
+        <div class="fg"><label class="fgl">Country</label><input type="text" id="f_country" value="${v("country")}" placeholder="India"/></div>
+        <div class="fg"><label class="fgl">Baptism Date</label><input type="date" id="f_baptismDate" value="${v("baptismDate")}"/></div>
+        <div class="fg"><label class="fgl">Confirmation Date</label><input type="date" id="f_confirmationDate" value="${v("confirmationDate")}"/></div>
+      </div>
+      <div class="sec-banner sec-lav">🎓 Academic Details</div>
+      <div class="fgrid">
+        <div class="fg"><label class="fgl">Class</label><input type="text" id="f_class" value="${v("class")}"/></div>
+        <div class="fg"><label class="fgl">Section</label><input type="text" id="f_section" value="${v("section")}"/></div>
+        <div class="fg"><label class="fgl">Extra Curricular</label><input type="text" id="f_extraCurricular" value="${v("extraCurricular")}"/></div>
+        <div class="fg"><label class="fgl">Joined Date</label><input type="date" id="f_joinedDate" value="${v("joinedDate")}"/></div>
+        <div class="fg"><label class="fgl">Status</label><select id="f_status">${STATS.map(s=>`<option${(c?c.status:s)==="Active"&&s==="Active"?" selected":c&&c.status===s?" selected":""}>${s}</option>`).join("")}</select></div>
+        <div class="fg span2"><label class="fgl">Notes</label><textarea id="f_notes">${v("notes")}</textarea></div>
+      </div>
+      <div class="divider"></div>
+      <div class="f g2">
+        <button class="btn btn-primary btn-lg" onclick="saveCh()">${c?"✓ Update Record":"+ Add Child"}</button>
+        <button class="btn btn-ghost btn-lg" onclick="iV=iSel?'prof':'list';rb()">Cancel</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function saveCh(){
+  const g=id=>document.getElementById(id)?.value||"";
+  const name=g("f_name").trim();if(!name){toast("Name is required","error");return}
+  const data={name,dob:g("f_dob"),bloodGroup:g("f_bloodGroup"),email:g("f_email"),emergencyContact:g("f_emergencyContact"),medicalInfo:g("f_medicalInfo"),fatherName:g("f_fatherName"),fatherOccupation:g("f_fatherOccupation"),motherName:g("f_motherName"),motherOccupation:g("f_motherOccupation"),phone1:g("f_phone1"),phone2:g("f_phone2"),fatherTime:g("f_fatherTime"),houseName:g("f_houseName"),wardName:g("f_wardName"),district:g("f_district"),state:g("f_state"),country:g("f_country"),baptismDate:g("f_baptismDate"),confirmationDate:g("f_confirmationDate"),class:g("f_class"),section:g("f_section"),extraCurricular:g("f_extraCurricular"),joinedDate:g("f_joinedDate"),status:g("f_status"),notes:g("f_notes")};
+  if(iSel){D.ch=D.ch.map(c=>c.id===iSel?{...c,...data}:c);audit("EDIT",`Edited ${name}`);toast("Record updated ✓");iV="prof"}
+  else{D.ch.push({...data,id:uid(),createdAt:new Date().toISOString()});audit("ADD",`Added ${name}`);toast("Child added ✓");iV="list"}
+  persist();rb()
+}
+
+/* ═══════ SECURE DELETE ═══════ */
+let delId=null,holdIv=null,holdProg=0;
+function initDel(id){
+  const c=D.ch.find(x=>x.id===id);if(!c)return;
+  delId=id;
+  const m=document.getElementById("delModal");
+  m.style.display="flex";
+  m.className="ov";
+  m.innerHTML=`
+    <div class="mdl">
+      <div class="mdl-hd">
+        <div class="mdl-title">⚠️ Delete Child Record</div>
+        <div class="mdl-sub">This action is permanent. All attendance and assignment data for this child will also be removed.</div>
+      </div>
+      <div class="mdl-body">
+        <div style="background:var(--red-p);border:1.5px solid var(--red-b);border-radius:var(--r14);padding:14px;margin-bottom:16px">
+          <div style="font-weight:800;font-size:14px">${esc(c.name)}</div>
+          <div class="tsub">Class ${esc(c.class)} · ${esc(c.fatherName)} · ${esc(c.phone1)}</div>
+          <div style="margin-top:7px">${achip(c.dob)}</div>
+        </div>
+        <div style="font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.65;background:var(--warn-p);border:1.5px solid var(--warn-b);border-radius:var(--r10);padding:12px">
+          🔒 <strong>Step 2 of 2:</strong> Press and hold the button below for <strong>5 seconds</strong> to permanently confirm deletion. Releasing early will cancel the action.
+        </div>
+        <button class="hold-btn" id="hbtn"
+          onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()"
+          ontouchstart="startHold(event)" ontouchend="cancelHold()" ontouchcancel="cancelHold()">
+          <div class="hold-prog" id="hprog"></div>
+          <span class="hold-lbl">🗑 Hold to Delete Permanently</span>
+        </button>
+        <div class="hold-status" id="hstatus">Press and hold for 5 seconds to confirm…</div>
+      </div>
+      <div class="mdl-ft">
+        <button class="btn btn-ghost" onclick="closeDel()">✕ Cancel — Keep Record</button>
+      </div>
+    </div>`;
+}
+function startHold(e){
+  if(e)e.preventDefault();
+  holdProg=0;const bar=document.getElementById("hprog");const st=document.getElementById("hstatus");
+  if(!bar||!st)return;
+  bar.style.transition="none";bar.style.width="0%";bar.className="hold-prog";
+  clearInterval(holdIv);
+  let elapsed=0;
+  st.style.color="var(--warn)";st.textContent="Hold steady…";
+  holdIv=setInterval(()=>{
+    elapsed+=80;holdProg=Math.min((elapsed/5000)*100,100);
+    bar.style.width=holdProg+"%";
+    const rem=Math.ceil((5000-elapsed)/1000);
+    if(rem>0)st.textContent=`Hold steady… ${rem}s remaining`;
+    if(elapsed>=5000){clearInterval(holdIv);bar.className="hold-prog";bar.style.background="rgba(216,48,48,.4)";st.style.color="var(--red-t)";st.textContent="✓ Confirmed! Deleting…";setTimeout(confirmDel,320)}
+  },80)
+}
+function cancelHold(){
+  clearInterval(holdIv);
+  const bar=document.getElementById("hprog");const st=document.getElementById("hstatus");
+  if(bar){bar.style.width="0%"}
+  if(st&&holdProg>0&&holdProg<100){st.style.color="var(--red-t)";st.textContent="Released too early — try again."}
+  holdProg=0;
+}
+function confirmDel(){
+  const c=D.ch.find(x=>x.id===delId);if(!c){closeDel();return;}
+  const nm=c.name,did=delId;
+  D.asgn=D.asgn.filter(a=>a.cid!==did);
+  D.att=D.att.filter(a=>a.cid!==did);
+  D.ch=D.ch.filter(x=>x.id!==did);
+  audit('DELETE','Deleted '+nm+' ('+did+')');persist();
+  // Reset navigation state BEFORE any render so profile view never tries to load deleted record
+  if(iSel===did){iSel=null;iV="list";}
+  closeDel();
+  toast(`${nm} permanently deleted.`,"error");
+  rb();
+}
+function closeDel(){
+  clearInterval(holdIv);holdProg=0;delId=null;
+  const m=document.getElementById("delModal");
+  if(m){m.style.display="none";m.innerHTML="";}
+}
+
+/* ═══════ MASS ASSIGNMENT ═══════ */
+let asDay="Sunday",asMass=null,asSearch="",asAF="all";
+// headAsgn: { 'day_mt': childId } — one head per mass slot
+if(!D.headAsgn)D.headAsgn={};
+function getHeadKey(){return asDay+"__"+asMass;}
+function getHead(){return D.headAsgn[getHeadKey()]||null;}
+function setHead(cid){
+  const key=getHeadKey();
+  if(D.headAsgn[key]===cid){delete D.headAsgn[key];}
+  else{D.headAsgn[key]=cid;}
+  DB.ref('headAsgn').set(D.headAsgn || null);
+  audit("HEAD",`Head for ${asDay} ${asMass}: ${cid}`);
+  rb();
+}
+function rAsgn(){
+  const masses=SCHED[asDay]||[];
+  let active=D.ch.filter(c=>c.status==="Active");
+  if(asAF!=="all")active=active.filter(c=>ageGrp(c.dob)===asAF);
+  const assigned=asMass?D.asgn.filter(a=>a.day===asDay&&a.mt===asMass).map(a=>a.cid):[];
+  const pool=active.filter(c=>!asSearch||c.name.toLowerCase().includes(asSearch.toLowerCase()));
+  return`<div>
+    <div class="hero">
+      <div class="ph-row">
+        <div><div class="pg-title">Mass Assignment</div><div class="pg-sub">Assign altar boys to scheduled masses</div></div>
+      </div>
+    </div>
+    <div class="card mb3">
+      <div class="fg" style="max-width:220px"><label class="fgl">Day of Week</label>
+        <select onchange="asDay=this.value;asMass=null;rb()">${DAYS.map(d=>`<option${asDay===d?" selected":""}>${d}</option>`).join("")}</select>
+      </div>
+      <div class="slbl" style="margin-top:16px;margin-bottom:10px">Available Masses – ${esc(asDay)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${masses.map(t=>`<button class="mchip${asMass===t?" on":""}" onclick="asMass='${t}';rb()">⛪ ${fmt12(t)} <span class="mcnt">${D.asgn.filter(a=>a.day===asDay&&a.mt===t).length}</span></button>`).join("")}
+      </div>
+    </div>
+    ${asMass?`<div class="card">
+      <div class="f jb ic mb3" style="flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="fb" style="font-size:15px">${esc(asDay)} · ${fmt12(asMass)}</div>
+          <div class="tsub">${assigned.length} children assigned
+            ${getHead()?` · <span style="color:#a07000;font-weight:800">👑 Head: ${esc(D.ch.find(c=>c.id===getHead())?.name||"")}</span>`:" · No head assigned"}
+          </div>
+        </div>
+        <div class="f g2">
+          <button class="btn btn-green btn-sm" onclick="asAll()">✓ All</button>
+          <button class="btn btn-ghost btn-sm" onclick="asClear()">✕ Clear</button>
+          ${getHead()?`<button class="btn btn-sm" style="background:#fff8e6;border:1.5px solid #f0c060;color:#a07000" onclick="setHead(getHead())">✕ Remove Head</button>`:""}
+        </div>
+      </div>
+      <div class="afbar">
+        ${[["all","All"],["child","≤9"],["pre","10–12"],["teen","13–17"],["adult","18+"]].map(([v,l])=>`<button class="afbtn af-${v}${asAF===v?" on":""}" onclick="asAF='${v}';rb()">${l}</button>`).join("")}
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:12px">
+        <input type="text" id="asSearchBox" style="flex:1;border:1.5px solid var(--border);border-radius:var(--r10);padding:9px 12px;outline:none;font-size:13px" placeholder="Search children… (Enter or tap Search)" value="${esc(asSearch)}"
+          onkeydown="if(event.key==='Enter'){asSearch=this.value;rb()}"/>
+        <button onclick="asSearch=document.getElementById('asSearchBox').value;rb()"
+          style="background:var(--acc);color:#fff;border:none;border-radius:var(--r10);padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0">Search</button>
+        ${asSearch?`<button onclick="asSearch='';rb()" style="background:var(--surface);border:1.5px solid var(--border);color:var(--text2);border-radius:var(--r10);padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">✕</button>`:""}
+      </div>
+      ${pool.length===0?`<div class="empty">No children found.</div>`:`
+      <div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;padding:6px 10px;background:var(--warn-p);border:1px solid var(--warn-b);border-radius:var(--r10)">
+          👑 <strong>Head:</strong> Check ✓ to assign, then click the 👑 star to designate one child as Mass Head (leader). Only one head per mass.
+        </div>
+        ${pool.map(c=>{
+          const isAsgn=assigned.includes(c.id);
+          const isHead=getHead()===c.id;
+          return`<div class="ci${isAsgn?" ck":""}${isHead?" ci-head":""}" style="${isHead?"border-color:#f0a800!important;background:linear-gradient(135deg,#fff,#fffbec)!important;":""}" onclick="togAsgn('${c.id}')">
+            <div class="cbox${isAsgn?" on":""}">
+              ${isAsgn?`<span class="ck-ic">✓</span>`:""}
+            </div>
+            <div class="f1">
+              <div class="fb" style="display:flex;align-items:center;gap:6px">
+                ${esc(c.name)}
+                ${isHead?`<span style="background:#f0a800;color:#fff;border-radius:var(--rf);padding:2px 8px;font-size:10px;font-weight:800">👑 HEAD</span>`:""}
+              </div>
+              <div class="tsub">Cls ${esc(c.class)} · ${esc(c.fatherName)}</div>
+            </div>
+            ${achip(c.dob)}
+            ${isAsgn?`<button class="btn btn-sm" 
+              style="${isHead?"background:#f0a800;border-color:#d99000;color:#fff;":"background:#fff8e6;border-color:#f0c060;color:#a07000;"}" 
+              onclick="event.stopPropagation();if(${JSON.stringify(isAsgn)}){setHead('${c.id}')}"
+              title="${isHead?"Remove as Head":"Set as Head (👑 Leader)"}">
+              ${isHead?"👑 Head":"☆ Set Head"}
+            </button>`:""}
+          </div>`;
+        }).join("")}
+      </div>`}
+    </div>`:`<div class="card"><div class="empty"><div class="empty-i">⛪</div>Select a mass time above.</div></div>`}
+  </div>`;
+}
+function togAsgn(cid){
+  const ex=D.asgn.find(a=>a.day===asDay&&a.mt===asMass&&a.cid===cid);
+  if(ex){D.asgn=D.asgn.filter(a=>a.id!==ex.id);audit("UNASGN",`${cid} from ${asDay} ${asMass}`)}
+  else{
+    const conf=D.asgn.filter(a=>a.day===asDay&&a.cid===cid&&a.mt!==asMass);
+    if(conf.length>0&&!confirm(`Already assigned to another mass on ${asDay}. Add anyway?`))return;
+    D.asgn.push({id:uid(),day:asDay,mt:asMass,cid,createdAt:new Date().toISOString()});
+    audit("ASGN",`${cid} to ${asDay} ${asMass}`)
+  }
+  persist();rb()
+}
+function asAll(){
+  const active=D.ch.filter(c=>c.status==="Active"&&(asAF==="all"||ageGrp(c.dob)===asAF));
+  active.forEach(c=>{if(!D.asgn.find(a=>a.day===asDay&&a.mt===asMass&&a.cid===c.id))D.asgn.push({id:uid(),day:asDay,mt:asMass,cid:c.id,createdAt:new Date().toISOString()})});
+  audit('ASGN_BULK','All to '+asDay+' '+asMass);persist();rb()
+}
+function asClear(){D.asgn=D.asgn.filter(a=>!(a.day===asDay&&a.mt===asMass));audit('UNASGN_BULK','Cleared '+asDay+' '+asMass);persist();rb()}
+
+/* ═══════ ATTENDANCE ═══════ */
+let atType="mass",atDate=new Date().toISOString().slice(0,10),atMass=null,atMarks={},atStep="entry",atSearch="",atAF="all";
+
+function attPool(){
+  const d=new Date(atDate+"T00:00:00"),day=DAYS[d.getDay()];
+  let pool=atType==="meeting"?D.ch.filter(c=>c.status==="Active"):(!atMass?[]:D.ch.filter(c=>c.status==="Active"&&D.asgn.some(a=>a.day===day&&a.mt===atMass&&a.cid===c.id)));
+  if(atAF!=="all")pool=pool.filter(c=>ageGrp(c.dob)===atAF);
+  return pool
+}
+function ldAtt(){const pool=attPool();const m={};pool.forEach(c=>{const ex=D.att.find(a=>a.cid===c.id&&a.date===atDate&&a.type===atType&&(atType==="meeting"||a.mt===atMass));m[c.id]=ex?ex.status==="present":false});atMarks=m}
+function groupByAge(list){const g={child:[],pre:[],teen:[],adult:[],unk:[]};list.forEach(c=>g[ageGrp(c.dob)].push(c));return g}
+
+function rAtt(){
+  const d=new Date(atDate+"T00:00:00"),day=DAYS[d.getDay()],masses=SCHED[day]||[];
+  const pool=attPool(),filtered=pool.filter(c=>!atSearch||c.name.toLowerCase().includes(atSearch.toLowerCase()));
+  const presCnt=Object.values(atMarks).filter(Boolean).length,totCnt=pool.length;
+
+  if(atStep==="preview"){
+    const groups=groupByAge(pool);
+    return`<div>
+      <div class="ph-row mb3"><button class="btn btn-ghost" onclick="atStep='entry';rb()">← Edit</button><div class="pg-title">Preview Attendance</div><div></div></div>
+      <div class="steps">
+        <div class="step done"><div class="snum">✓</div>Entry</div><div class="sdiv"></div>
+        <div class="step on"><div class="snum">2</div>Preview</div><div class="sdiv"></div>
+        <div class="step"><div class="snum">3</div>Confirm</div>
+      </div>
+      <div class="srow">
+        <div class="sc sc-blue"><div class="sv">${totCnt}</div><div class="sl">Total</div></div>
+        <div class="sc sc-green"><div class="sv">${presCnt}</div><div class="sl">Present</div></div>
+        <div class="sc sc-pink"><div class="sv">${totCnt-presCnt}</div><div class="sl">Absent</div></div>
+        <div class="sc sc-peach"><div class="sv">${pct(presCnt,totCnt)}%</div><div class="sl">Rate</div></div>
+      </div>
+      <div class="card">
+        <div class="slbl">${atType==="meeting"?"Meeting":fmt12(atMass)} · ${atDate}</div>
+        ${Object.entries(groups).filter(([,a])=>a.length>0).map(([g,arr])=>`
+          <div class="ash ${g}">
+            <span class="ash-title">${ageGrpLabel(g)}</span>
+            <span class="ash-cnt">${arr.filter(c=>atMarks[c.id]).length}/${arr.length} present</span>
+          </div>
+          <div class="twrap mb3">
+            <table><thead><tr><th>Name</th><th>Age</th><th>Class</th><th>Status</th></tr></thead>
+            <tbody>${arr.map(c=>`<tr><td class="fb">${esc(c.name)}</td><td>${achip(c.dob)}</td><td>${esc(c.class)}</td><td><span class="bdg ${atMarks[c.id]?"bdg-green":"bdg-red"}">${atMarks[c.id]?"✓ Present":"✗ Absent"}</span></td></tr>`).join("")}
+            </tbody></table>
+          </div>`).join("")}
+        <div class="f g2 mt2">
+          <button class="btn btn-ghost" onclick="atStep='entry';rb()">← Back</button>
+          <button class="btn btn-primary" onclick="atStep='confirm';rb()">Confirm →</button>
+        </div>
+      </div>
+    </div>`
+  }
+
+  if(atStep==="confirm"){
+    return`<div>
+      <div class="ph-row mb3"><button class="btn btn-ghost" onclick="atStep='preview';rb()">← Back</button><div class="pg-title">Final Confirmation</div><div></div></div>
+      <div class="steps">
+        <div class="step done"><div class="snum">✓</div>Entry</div><div class="sdiv"></div>
+        <div class="step done"><div class="snum">✓</div>Preview</div><div class="sdiv"></div>
+        <div class="step on"><div class="snum">3</div>Confirm</div>
+      </div>
+      <div class="card" style="text-align:center;padding:36px;background:linear-gradient(135deg,#fff,var(--green-p));border-color:var(--green-b)">
+        <div style="font-size:46px;margin-bottom:14px">💾</div>
+        <div class="pg-title" style="margin-bottom:8px">Save Attendance Record</div>
+        <div style="color:var(--text2);margin-bottom:6px">Date: <strong>${atDate}</strong> · ${atType==="meeting"?"Meeting":fmt12(atMass)}</div>
+        <div style="font-size:20px;font-weight:800;color:var(--green-t);margin-bottom:22px">${presCnt} present · ${totCnt-presCnt} absent · ${pct(presCnt,totCnt)}%</div>
+        <div class="f g2" style="justify-content:center">
+          <button class="btn btn-ghost btn-lg" onclick="atStep='preview';rb()">← Back</button>
+          <button class="btn btn-success btn-lg" onclick="saveAtt()">✓ Save Permanently</button>
+        </div>
+      </div>
+    </div>`
+  }
+
+  const groups=groupByAge(filtered),showGrouped=atAF==="all"&&filtered.length>0;
+  return`<div>
+    <div class="hero">
+      <div class="ph-row"><div><div class="pg-title">Attendance</div><div class="pg-sub">Mark and save attendance · ${day} ${atDate}</div></div></div>
+    </div>
+    <div class="steps">
+      <div class="step on"><div class="snum">1</div>Entry</div><div class="sdiv"></div>
+      <div class="step"><div class="snum">2</div>Preview</div><div class="sdiv"></div>
+      <div class="step"><div class="snum">3</div>Confirm</div>
+    </div>
+    <div class="card mb3">
+      <div class="stabs">
+        <button class="stab${atType==="mass"?" on":""}" onclick="atType='mass';atMass=null;atMarks={};rb()">⛪ Mass Attendance</button>
+        <button class="stab${atType==="meeting"?" on":""}" onclick="atType='meeting';atMarks={};ldAtt();rb()">📋 Meeting Attendance</button>
+      </div>
+      <div class="fgrid" style="grid-template-columns:1fr 1fr">
+        <div class="fg"><label class="fgl">Date</label><input type="date" value="${atDate}" onchange="atDate=this.value;atMass=null;atMarks={};ldAtt();rb()"/></div>
+        <div class="fg"><label class="fgl">Day (auto)</label><input type="text" value="${day}" readonly style="background:var(--surface2);color:var(--text3)"/></div>
+      </div>
+      ${atType==="mass"?`<div class="slbl mt2">Select Mass – ${day}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          ${masses.map(t=>`<button class="mchip${atMass===t?" on":""}" onclick="atMass='${t}';ldAtt();rb()">⛪ ${fmt12(t)}</button>`).join("")}
+        </div>`:""}
+    </div>
+    ${(atType==="meeting"||atMass)?`<div class="card">
+      <div class="f jb ic mb3" style="flex-wrap:wrap;gap:10px">
+        <div><div class="fb" style="font-size:15px">${atType==="meeting"?"Meeting":fmt12(atMass)}</div><div class="tsub">${presCnt}/${totCnt} present</div></div>
+        <div class="f g2">
+          <button class="btn btn-green btn-sm" onclick="atAll(true)">All Present</button>
+          <button class="btn btn-ghost btn-sm" onclick="atAll(false)">All Absent</button>
+        </div>
+      </div>
+      <div class="afbar">
+        ${[["all","All Ages"],["child","≤9"],["pre","10–12"],["teen","13–17"],["adult","18+"]].map(([v,l])=>`<button class="afbtn af-${v}${atAF===v?" on":""}" onclick="atAF='${v}';rb()">${l}</button>`).join("")}
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:12px">
+        <input type="text" id="atSearchBox" style="flex:1;border:1.5px solid var(--border);border-radius:var(--r10);padding:9px 12px;outline:none;font-size:13px" placeholder="Search children… (Enter or tap Search)" value="${esc(atSearch)}"
+          onkeydown="if(event.key==='Enter'){atSearch=this.value;rb()}"/>
+        <button onclick="atSearch=document.getElementById('atSearchBox').value;rb()"
+          style="background:var(--acc);color:#fff;border:none;border-radius:var(--r10);padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0">Search</button>
+        ${atSearch?`<button onclick="atSearch='';rb()" style="background:var(--surface);border:1.5px solid var(--border);color:var(--text2);border-radius:var(--r10);padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">✕</button>`:""}
+      </div>
+      ${filtered.length===0?`<div class="empty">${atType==="mass"?"No children assigned to this mass.":"No children found."}</div>`:`
+      <div>
+        ${showGrouped?Object.entries(groups).filter(([,a])=>a.length>0).map(([g,arr])=>`
+          <div class="ash ${g}">
+            <span class="ash-title">${ageGrpLabel(g)}</span>
+            <span class="ash-cnt">${arr.filter(c=>atMarks[c.id]).length}/${arr.length} present</span>
+          </div>
+          ${arr.map(c=>`<div class="ci${atMarks[c.id]?" pres":""}" onclick="atTog('${c.id}')">
+            <div class="cbox${atMarks[c.id]?" on-g":""}"><span class="ck-ic">${atMarks[c.id]?"✓":""}</span></div>
+            <div class="f1"><div class="fb">${esc(c.name)}</div><div class="tsub">Cls ${esc(c.class)} · ${esc(c.fatherName)}</div></div>
+            ${achip(c.dob)}
+            <span class="bdg ${atMarks[c.id]?"bdg-green":"bdg-red"}">${atMarks[c.id]?"Present":"Absent"}</span>
+          </div>`).join("")}`).join("")
+          :filtered.map(c=>`<div class="ci${atMarks[c.id]?" pres":""}" onclick="atTog('${c.id}')">
+            <div class="cbox${atMarks[c.id]?" on-g":""}"><span class="ck-ic">${atMarks[c.id]?"✓":""}</span></div>
+            <div class="f1"><div class="fb">${esc(c.name)}</div><div class="tsub">Cls ${esc(c.class)}</div></div>
+            ${achip(c.dob)}
+            <span class="bdg ${atMarks[c.id]?"bdg-green":"bdg-red"}">${atMarks[c.id]?"Present":"Absent"}</span>
+          </div>`).join("")}
+      </div>
+      <div class="mt3"><button class="btn btn-primary btn-lg wf" onclick="atStep='preview';rb()">Preview Attendance →</button></div>`}
+    </div>`:`<div class="card"><div class="empty"><div class="empty-i">✅</div>Select a mass above to begin.</div></div>`}
+  </div>`
+}
+function atTog(id){atMarks[id]=!atMarks[id];rb()}
+function atAll(v){attPool().forEach(c=>atMarks[c.id]=v);rb()}
+function saveAtt(){
+  const pool=attPool();
+  const d=new Date(atDate+"T00:00:00"),day=DAYS[d.getDay()];
+  const recs=pool.map(c=>({id:uid(),type:atType,date:atDate,year:atDate.slice(0,4),month:atDate.slice(5,7),cid:c.id,status:atMarks[c.id]?"present":"absent",mt:atType==="mass"?atMass:null,day:atType==="mass"?day:null}));
+  D.att=[...D.att.filter(a=>!(a.date===atDate&&a.type===atType&&(atType==="meeting"||a.mt===atMass))),...recs];
+  audit("ATT",`${atType} ${atDate} ${Object.values(atMarks).filter(Boolean).length}/${pool.length}`);
+  persist().then(function(){toast("Attendance saved ✓");atStep="entry";atSearch="";atMarks={};rb()
+}
+function bAtt(){const pool=attPool();if(pool.length>0&&Object.keys(atMarks).length===0)ldAtt()}
+
+/* ═══════ REPORTS ═══════ */
+let rY=String(new Date().getFullYear()),rM=String(new Date().getMonth()+1).padStart(2,"0"),rType="all",rCls="All",rAF="all";
+
+function rRpt(){
+  const years=["2023","2024","2025","2026"];
+  const mos=[["01","January"],["02","February"],["03","March"],["04","April"],["05","May"],["06","June"],["07","July"],["08","August"],["09","September"],["10","October"],["11","November"],["12","December"]];
+  const fatts=D.att.filter(a=>a.year===rY&&a.month===rM);
+  const massAtts=D.att.filter(a=>a.year===rY&&a.month===rM&&a.type==="mass");
+  const meetAtts=D.att.filter(a=>a.year===rY&&a.month===rM&&a.type==="meeting");
+  let active=D.ch.filter(c=>c.status==="Active");
+  const stats=active.map(c=>{
+    const mR=massAtts.filter(a=>a.cid===c.id);
+    const mtR=meetAtts.filter(a=>a.cid===c.id);
+    const mP=mR.filter(a=>a.status==="present").length;
+    const mtP=mtR.filter(a=>a.status==="present").length;
+    const totalPres=mP+mtP,totalRecs=mR.length+mtR.length;
+    return{...c,mP,mT:mR.length,mtP,mtT:mtR.length,total:totalRecs,p:pct(totalPres,totalRecs)}
+  }).filter(c=>c.total>0).sort((a,b)=>b.p-a.p);
+
+  const totalStudents=stats.length;
+  const allMassPres=stats.reduce((s,c)=>s+c.mP,0),allMassTotal=stats.reduce((s,c)=>s+c.mT,0);
+  const allMeetPres=stats.reduce((s,c)=>s+c.mtP,0),allMeetTotal=stats.reduce((s,c)=>s+c.mtT,0);
+  const low=stats.filter(s=>s.p<75);
+
+  return`<div>
+    <div class="hero">
+      <div class="ph-row">
+        <div>
+          <div class="pg-title">Attendance Report</div>
+          <div class="pg-sub">${MONTHS[parseInt(rM)-1]} ${rY} · ${totalStudents} students with records</div>
+        </div>
+        <button class="btn btn-primary" onclick="expRpt()">⬇ Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Filters: only Year + Month -->
+    <div class="card mb3">
+      <div class="filter-row">
+        <div class="fg"><label class="fgl">Year</label><select onchange="rY=this.value;rb()">${years.map(y=>`<option${rY===y?" selected":""}>${y}</option>`).join("")}</select></div>
+        <div class="fg"><label class="fgl">Month</label><select onchange="rM=this.value;rb()">${mos.map(([v,l])=>`<option value="${v}"${rM===v?" selected":""}>${l}</option>`).join("")}</select></div>
+      </div>
+    </div>
+
+    <!-- Summary stats: 3 cards only -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div class="sc sc-blue"><div class="si">⛪</div><div class="sv">${pct(allMassPres,allMassTotal)}%</div><div class="sl">Mass Rate</div><div style="font-size:11px;color:var(--text3);margin-top:4px;position:relative;z-index:1">${allMassPres}/${allMassTotal} sessions</div></div>
+      <div class="sc sc-green"><div class="si">📋</div><div class="sv">${pct(allMeetPres,allMeetTotal)}%</div><div class="sl">Meeting Rate</div><div style="font-size:11px;color:var(--text3);margin-top:4px;position:relative;z-index:1">${allMeetPres}/${allMeetTotal} meetings</div></div>
+      <div class="sc sc-peach"><div class="si">👥</div><div class="sv">${totalStudents}</div><div class="sl">Students</div><div style="font-size:11px;color:var(--text3);margin-top:4px;position:relative;z-index:1">${low.length} below 75%</div></div>
+    </div>
+
+    <!-- Low attendance alert (names only, no age chip) -->
+    ${low.length>0?`<div class="alert alert-warn mb3">
+      <div class="at">⚠ ${low.length} student${low.length>1?"s":""} below 75% attendance</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+        ${low.map(c=>`<span style="background:#fff;border:1.5px solid var(--warn-b);border-radius:var(--rf);padding:3px 10px;font-size:12px;font-weight:700;color:var(--warn)">${esc(c.name)} <span style="color:var(--red-t)">${c.p}%</span></span>`).join("")}
+      </div>
+    </div>`:""}
+
+    <!-- Clean report table: Name | Mass | Meeting | Rate ONLY -->
+    <div class="card">
+      <div class="slbl">Student Attendance Report — ${MONTHS[parseInt(rM)-1]} ${rY}</div>
+      ${stats.length===0?`<div class="empty"><div class="empty-i">📊</div>No attendance data recorded for this period.</div>`:`
+      <div class="twrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40%">Name</th>
+              <th style="text-align:center">Mass</th>
+              <th style="text-align:center">Meeting</th>
+              <th style="text-align:center">Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${stats.map((c,i)=>`<tr>
+              <td>
+                <div class="fb" style="font-size:13.5px">${esc(c.name)}</div>
+                ${c.p<75?`<div style="font-size:10.5px;color:var(--red-t);font-weight:700;margin-top:2px">⚠ Low attendance</div>`:""}
+              </td>
+              <td style="text-align:center">
+                <div class="fb" style="font-size:13px">${c.mP}<span style="color:var(--text3);font-weight:400">/${c.mT}</span></div>
+                <div style="font-size:10px;color:var(--text3)">${c.mT>0?pct(c.mP,c.mT)+"%":"—"}</div>
+              </td>
+              <td style="text-align:center">
+                <div class="fb" style="font-size:13px">${c.mtP}<span style="color:var(--text3);font-weight:400">/${c.mtT}</span></div>
+                <div style="font-size:10px;color:var(--text3)">${c.mtT>0?pct(c.mtP,c.mtT)+"%":"—"}</div>
+              </td>
+              <td style="text-align:center">
+                <div style="display:flex;align-items:center;gap:8px;justify-content:center">
+                  <div class="pbar" style="min-width:48px">
+                    <div class="pfill" style="width:${c.p}%;background:${c.p>=75?"var(--green-m)":c.p>=50?"var(--warn)":"var(--red)"}"></div>
+                  </div>
+                  <span class="fb" style="font-size:14px;min-width:38px;color:${c.p>=75?"var(--green-t)":c.p>=50?"var(--warn)":"var(--red-t)"}">${c.p}%</span>
+                </div>
+              </td>
+            </tr>`).join("")}
+          </tbody>
+          <!-- Summary footer row -->
+          <tfoot>
+            <tr style="background:linear-gradient(135deg,#f6f8fe,#f0f4fe)">
+              <td class="fb" style="font-size:12px;color:var(--text2);padding:11px 14px">Total (${stats.length} students)</td>
+              <td style="text-align:center;font-weight:800;font-size:13px;color:var(--blue-t)">${pct(allMassPres,allMassTotal)}%</td>
+              <td style="text-align:center;font-weight:800;font-size:13px;color:var(--green-t)">${pct(allMeetPres,allMeetTotal)}%</td>
+              <td style="text-align:center;font-weight:800;font-size:14px;color:var(--acc)">${pct(stats.reduce((s,c)=>s+c.mP+c.mtP,0),stats.reduce((s,c)=>s+c.mT+c.mtT,0))}%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>`}
+    </div>
+  </div>`
+}
+function expRpt(){
+  const massAtts=D.att.filter(a=>a.year===rY&&a.month===rM&&a.type==="mass");
+  const meetAtts=D.att.filter(a=>a.year===rY&&a.month===rM&&a.type==="meeting");
+  const active=D.ch.filter(c=>c.status==="Active");
+  const rows=[["Name","Mass Present","Mass Total","Mass %","Meeting Present","Meeting Total","Meeting %","Overall Rate %"]];
+  active.forEach(c=>{
+    const mR=massAtts.filter(a=>a.cid===c.id),mtR=meetAtts.filter(a=>a.cid===c.id);
+    const mP=mR.filter(a=>a.status==="present").length,mtP=mtR.filter(a=>a.status==="present").length;
+    const totalP=mP+mtP,totalT=mR.length+mtR.length;
+    if(totalT>0)rows.push([c.name,mP,mR.length,pct(mP,mR.length),mtP,mtR.length,pct(mtP,mtR.length),pct(totalP,totalT)]);
+  });
+  dlf(`attendance_report_${rY}_${rM}.csv`,rows.map(r=>r.join(",")).join("\n"),"text/csv");
+  toast("Report exported ✓");
+}
+
+/* ═══════ DATA MANAGEMENT ═══════ */
+let dTab="import",impPrev=null,impErr=null;
+function rData(){
+  return`<div>
+    <div class="hero"><div><div class="pg-title">Data Management</div><div class="pg-sub">Import, export, backup and restore</div></div></div>
+    <div class="stabs">
+      <button class="stab${dTab==="import"?" on":""}" onclick="dTab='import';rb()">📥 Import</button>
+      <button class="stab${dTab==="export"?" on":""}" onclick="dTab='export';rb()">📤 Export</button>
+      <button class="stab${dTab==="backup"?" on":""}" onclick="dTab='backup';rb()">💾 Backup</button>
+      <button class="stab${dTab==="audit"?" on":""}" onclick="dTab='audit';rb()">📜 Audit Log</button>
+    </div>
+    ${dTab==="import"?rImport():""}${dTab==="export"?rExport():""}${dTab==="backup"?rBackup():""}${dTab==="audit"?rAudit():""}
+  </div>`
+}
+function bData(){
+  setTimeout(function(){
+    var el = document.getElementById('ci_inp');
+    if (el) el.onchange = handleCSV;
+    var ri = document.getElementById('ri_inp');
+    if (ri) ri.onchange = doRestore;
+  }, 50);
+}
+function rImport(){
+  var errHtml = '';
+  if (impErr) {
+    errHtml = '<div style="background:#fdf0f0;border:2px solid #f5a0a0;border-radius:12px;padding:16px;margin-bottom:18px">'
+      + '<div style="font-weight:800;color:#991515;margin-bottom:6px;font-size:14px">⚠ Import Failed</div>'
+      + '<div style="font-size:13px;color:#991515;line-height:1.6">' + esc(impErr) + '</div>'
+      + '</div>';
+  }
+  
+  var previewHtml = '';
+  if (impPrev && impPrev.rows) {
+    var errRows = impPrev.errors && impPrev.errors.length > 0
+      ? '<div style="background:#fdf5e6;border:1.5px solid #f8c878;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#a06020">'
+        + '<b>⚠ ' + impPrev.errors.length + ' row(s) skipped:</b> ' + impPrev.errors.slice(0,3).map(function(e){return esc(e)}).join(' | ')
+        + '</div>' : '';
+    
+    var rows = impPrev.rows.slice(0, 20).map(function(r) {
+      return '<tr>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef;font-weight:700">' + esc(r.name) + '</td>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef">' + (r.dob ? esc(r.dob) : '<span style="color:#aaa">—</span>') + '</td>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef">' + esc(r.fatherName) + '</td>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef">' + esc(r.phone1) + '</td>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef">' + esc(r.class) + '</td>'
+        + '<td style="padding:9px 12px;border-bottom:1px solid #e4e8ef"><span style="background:' + (r.status==='Active'?'#e6f7ef':'#fdf5e6') + ';color:' + (r.status==='Active'?'#1e7a4a':'#a06020') + ';border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">' + esc(r.status||'Active') + '</span></td>'
+        + '</tr>';
+    }).join('');
+    
+    var moreRow = impPrev.rows.length > 20 
+      ? '<tr><td colspan="6" style="text-align:center;padding:10px;color:#8a96a8;font-size:12px">…and ' + (impPrev.rows.length - 20) + ' more records</td></tr>' 
+      : '';
+    
+    previewHtml = '<div style="margin-top:20px">'
+      + errRows
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">'
+      + '<div><div style="font-size:16px;font-weight:800;color:#1a2035">✓ Ready to Import</div>'
+      + '<div style="font-size:13px;color:#8a96a8;margin-top:2px">' + impPrev.rows.length + ' valid records found in your file</div></div>'
+      + '<div style="display:flex;gap:8px">'
+      + '<button onclick="impPrev=null;rb()" style="background:#f8f9fc;border:1.5px solid #e4e8ef;color:#4a5568;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer">✕ Cancel</button>'
+      + '<button onclick="confImport()" style="background:linear-gradient(135deg,#1e7a4a,#28a05f);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(30,122,74,.3)">⬆ Import ' + impPrev.rows.length + ' Records</button>'
+      + '</div></div>'
+      + '<div style="overflow-x:auto;border-radius:10px;border:1.5px solid #e4e8ef">'
+      + '<table style="width:100%;border-collapse:collapse;background:#fff">'
+      + '<thead><tr style="background:#f6f8fe">'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">Name</th>'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">DOB</th>'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">Father</th>'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">Phone</th>'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">Class</th>'
+      + '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e4e8ef">Status</th>'
+      + '</tr></thead>'
+      + '<tbody>' + rows + moreRow + '</tbody>'
+      + '</table></div></div>';
+  }
+  
+  return '<div style="background:#fff;border:1.5px solid #e4e8ef;border-radius:18px;padding:24px;box-shadow:0 1px 3px rgba(26,32,53,.07)">'
+    + '<div style="margin-bottom:20px">'
+    + '<div style="font-size:18px;font-weight:800;color:#1a2035;margin-bottom:4px">Import Students from CSV</div>'
+    + '<div style="font-size:13px;color:#8a96a8">Upload a CSV file. The system will automatically detect your column names.</div>'
+    + '</div>'
+    
+    + errHtml
+    
+    + '<div style="background:#edf2fe;border:1.5px solid #b8ccfc;border-radius:12px;padding:16px;margin-bottom:20px">'
+    + '<div style="font-weight:800;color:#2050c8;margin-bottom:8px;font-size:13px">📋 Supported Column Names</div>'
+    + '<div style="font-size:12px;color:#2050c8;line-height:2;word-break:break-word">'
+    + '<b>Required:</b> Name &nbsp;|&nbsp; '
+    + '<b>Optional:</b> Father\'s Name · Father\'s Occupation · Mother\'s Name · Mother\'s Occupation · Phone 1 · Phone 2 · House Name · Ward Name · District · State · Country · Date of Birth · Blood Group · Email · Emergency Contact · Medical Info · Baptism Date · Confirmation Date · Class · Section · Extra Curricular · Joined Date · Status · Notes'
+    + '</div>'
+    + '</div>'
+    
+    + '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px">'
+    + '<label style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#4a78f0,#2d55d0);color:#fff;border-radius:10px;padding:11px 20px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(74,120,240,.3)">'
+    + '📂 Choose CSV File<input type="file" id="ci_inp" accept=".csv,.txt" style="display:none"/>'
+    + '</label>'
+    + '<button onclick="dlTemplate()" style="background:#fff;border:1.5px solid #e4e8ef;color:#4a5568;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer">⬇ Download Template</button>'
+    + '</div>'
+    + '<div style="font-size:11.5px;color:#8a96a8;margin-top:6px">Accepted formats: .csv · .txt · UTF-8 or Excel CSV</div>'
+    
+    + previewHtml
+    + '</div>';
+}
+
+
+function rExport(){
+  return`<div>
+    <div class="xcard" onclick="expCh()"><div class="xic">👤</div><div class="f1"><div class="fb">Export All Children (Full)</div><div class="tsub">${D.ch.length} records with all fields → CSV</div></div><button class="btn btn-blue btn-sm">Export</button></div>
+    <div class="xcard" onclick="expAtt()"><div class="xic">✅</div><div class="f1"><div class="fb">Export Attendance</div><div class="tsub">${D.att.length} records → CSV</div></div><button class="btn btn-blue btn-sm">Export</button></div>
+    <div class="xcard" onclick="expAsgn()"><div class="xic">⛪</div><div class="f1"><div class="fb">Export Assignments</div><div class="tsub">${D.asgn.length} records → CSV</div></div><button class="btn btn-blue btn-sm">Export</button></div>
+  </div>`
+}
+function rBackup(){
+  return`<div>
+    <div class="xcard" onclick="doBackup()"><div class="xic">💾</div><div class="f1"><div class="fb">Create Full Backup</div><div class="tsub">All data → JSON backup file</div></div><button class="btn btn-primary btn-sm">Backup Now</button></div>
+    <div class="xcard" onclick="document.getElementById('ri_inp').click()"><div class="xic">🔄</div><div class="f1"><div class="fb">Restore from Backup</div><div class="tsub">Load a previous JSON backup</div></div><button class="btn btn-ghost btn-sm">Select File</button></div>
+    <input id="ri_inp" type="file" accept=".json" style="display:none" onchange="doRestore(event)"/>
+    <div class="alert alert-warn mt3"><div class="at">⚠ Important</div>Restoring will replace all current data. Always create a backup first.</div>
+  </div>`
+}
+function rAudit(){
+  return`<div class="card">
+    <div class="f jb ic mb3"><div class="slbl" style="margin:0">Audit Log</div><span class="bdg bdg-blue">${D.log.length} entries</span></div>
+    ${D.log.length===0?`<div class="empty">No entries yet.</div>`:`<div style="max-height:520px;overflow-y:auto">${D.log.slice(0,150).map(l=>`<div class="arow"><div class="aact">${esc(l.action)}</div><div class="adtl">${esc(l.detail)}</div><div class="ats">${new Date(l.ts).toLocaleString()}</div></div>`).join("")}</div>`}
+  </div>`
+}
+
+/* ── CSV FIELD MAPPING TABLE ─────────────────────────────────────────────
+   Maps every known CSV header variation → canonical camelCase field key.
+   Unknown headers are stored as-is (dynamic extra fields).           */
+const CSV_MAP={
+  // Name
+  "name":"name","Name":"name","full name":"name","Full Name":"name","student name":"name","Student Name":"name",
+  // Father
+  "father's name":"fatherName","Father's Name":"fatherName","father name":"fatherName","Father Name":"fatherName","fathername":"fatherName","FatherName":"fatherName",
+  "father's occupation":"fatherOccupation","Father's Occupation":"fatherOccupation","father occupation":"fatherOccupation","fatheroccupation":"fatherOccupation",
+  "father's time":"fatherTime","Father's Time":"fatherTime","father time":"fatherTime","fathertime":"fatherTime","father available time":"fatherTime",
+  // Mother
+  "mother's name":"motherName","Mother's Name":"motherName","mother name":"motherName","Mother Name":"motherName","mothername":"motherName","MotherName":"motherName",
+  "mother's occupation":"motherOccupation","Mother's Occupation":"motherOccupation","mother occupation":"motherOccupation","motheroccupation":"motherOccupation",
+  // Phone
+  "phone 1":"phone1","Phone 1":"phone1","phone1":"phone1","Phone1":"phone1","phone":"phone1","Phone":"phone1","mobile":"phone1","Mobile":"phone1","contact":"phone1",
+  "phone 2":"phone2","Phone 2":"phone2","phone2":"phone2","Phone2":"phone2","alternate phone":"phone2","alt phone":"phone2",
+  // Location
+  "house name":"houseName","House Name":"houseName","housename":"houseName","house":"houseName","House":"houseName","family name":"houseName",
+  "ward name":"wardName","Ward Name":"wardName","wardname":"wardName","ward":"wardName","Ward":"wardName",
+  "district":"district","District":"district",
+  "state":"state","State":"state",
+  "country":"country","Country":"country",
+  // DOB
+  "date of birth":"dob","Date of Birth":"dob","dob":"dob","DOB":"dob","birth date":"dob","birthdate":"dob","birthday":"dob",
+  // Medical / Parish
+  "blood group":"bloodGroup","Blood Group":"bloodGroup","bloodgroup":"bloodGroup","BloodGroup":"bloodGroup","blood type":"bloodGroup",
+  "email":"email","Email":"email","email address":"email","Email Address":"email",
+  "emergency contact":"emergencyContact","Emergency Contact":"emergencyContact","emergencycontact":"emergencyContact","emergency":"emergencyContact",
+  "medical info":"medicalInfo","Medical Info":"medicalInfo","medicalinfo":"medicalInfo","medical":"medicalInfo","health":"medicalInfo","Medical Information":"medicalInfo",
+  "baptism date":"baptismDate","Baptism Date":"baptismDate","baptismdate":"baptismDate","baptism":"baptismDate",
+  "confirmation date":"confirmationDate","Confirmation Date":"confirmationDate","confirmationdate":"confirmationDate","confirmation":"confirmationDate",
+  // Academic
+  "class":"class","Class":"class","grade":"class","Grade":"class","standard":"class","Standard":"class",
+  "section":"section","Section":"section","division":"section","Division":"section",
+  "extra curricular":"extraCurricular","Extra Curricular":"extraCurricular","extracurricular":"extraCurricular","ExtraCurricular":"extraCurricular","activities":"extraCurricular",
+  "joined date":"joinedDate","Joined Date":"joinedDate","joineddate":"joinedDate","join date":"joinedDate","enrollment date":"joinedDate","Enrollment Date":"joinedDate",
+  "status":"status","Status":"status","active":"status",
+  "notes":"notes","Notes":"notes","remarks":"notes","Remarks":"notes","comments":"notes","Comments":"notes",
+};
+
+// Date fields that may be Excel serials or ISO strings
+const DATE_FIELDS=new Set(["dob","baptismDate","confirmationDate","joinedDate"]);
+
+function edISO(v){
+  if(!v||v.trim()==="")return "";
+  const n=Number(v);
+  if(!isNaN(n)&&n>1000&&n<99999){// Excel date serial
+    const d=new Date((n-25569)*86400*1000);
+    return d.toISOString().slice(0,10);
+  }
+  // Already ISO or parseable date string
+  const d=new Date(v);
+  if(!isNaN(d.getTime())&&v.length>=6)return d.toISOString().slice(0,10);
+  return v.trim();
+}
+
+function parseCSVLine(line){
+  // Handles quoted fields with commas inside
+  const result=[];let cur="",inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){
+      if(inQ&&line[i+1]==='"'){cur+='"';i++;}
+      else inQ=!inQ;
+    } else if(ch===","&&!inQ){result.push(cur.trim());cur="";}
+    else cur+=ch;
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function parseCSVLine(line) {
+  /* Properly handles quoted fields containing commas */
+  var result = [], cur = '', inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    if (ch === '"') {
+      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (ch === ',' && !inQ) {
+      result.push(cur.trim());
+      cur = '';
+    } else {
+      cur += ch;
+    }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function edISO(v) {
+  if (!v || String(v).trim() === '') return '';
+  var s = String(v).trim();
+  var n = Number(s);
+  // Excel serial date (e.g. 44927 = 2023-01-01)
+  if (!isNaN(n) && n > 1000 && n < 99999) {
+    var d = new Date((n - 25569) * 86400 * 1000);
+    return d.toISOString().slice(0, 10);
+  }
+  // Already a date string
+  var d2 = new Date(s);
+  if (!isNaN(d2.getTime())) return d2.toISOString().slice(0, 10);
+  return s;
+}
+
+/* Header alias map — covers all realistic column name variations */
+var CSV_MAP = {
+  'name':'name','Name':'name','full name':'name','Full Name':'name','student name':'name','Student Name':'name',
+  "father's name":'fatherName',"Father's Name":'fatherName','father name':'fatherName','Father Name':'fatherName','fathername':'fatherName','FatherName':'fatherName','father':'fatherName','Father':'fatherName',
+  "father's occupation":'fatherOccupation',"Father's Occupation":'fatherOccupation','father occupation':'fatherOccupation','fatheroccupation':'fatherOccupation',
+  "mother's name":'motherName',"Mother's Name":'motherName','mother name':'motherName','Mother Name':'motherName','mothername':'motherName','MotherName':'motherName','mother':'motherName','Mother':'motherName',
+  "mother's occupation":'motherOccupation',"Mother's Occupation":'motherOccupation','mother occupation':'motherOccupation','motheroccupation':'motherOccupation',
+  'phone 1':'phone1','Phone 1':'phone1','phone1':'phone1','Phone1':'phone1','phone':'phone1','Phone':'phone1','mobile':'phone1','Mobile':'phone1','contact':'phone1','Contact':'phone1','telephone':'phone1',
+  'phone 2':'phone2','Phone 2':'phone2','phone2':'phone2','Phone2':'phone2','alternate phone':'phone2','alt phone':'phone2','mobile 2':'phone2',
+  "father's time":'fatherTime',"Father's Time":'fatherTime','father time':'fatherTime','fathertime':'fatherTime','available time':'fatherTime',
+  'house name':'houseName','House Name':'houseName','housename':'houseName','house':'houseName','House':'houseName','family name':'houseName','Family Name':'houseName','home':'houseName',
+  'ward name':'wardName','Ward Name':'wardName','wardname':'wardName','ward':'wardName','Ward':'wardName','area':'wardName','Area':'wardName',
+  'district':'district','District':'district',
+  'state':'state','State':'state',
+  'country':'country','Country':'country',
+  'date of birth':'dob','Date of Birth':'dob','dob':'dob','DOB':'dob','birth date':'dob','birthdate':'dob','birthday':'dob','Birth Date':'dob','Birthday':'dob','date_of_birth':'dob',
+  'blood group':'bloodGroup','Blood Group':'bloodGroup','bloodgroup':'bloodGroup','BloodGroup':'bloodGroup','blood type':'bloodGroup','Blood Type':'bloodGroup','blood':'bloodGroup',
+  'email':'email','Email':'email','email address':'email','Email Address':'email','e-mail':'email','E-mail':'email',
+  'emergency contact':'emergencyContact','Emergency Contact':'emergencyContact','emergencycontact':'emergencyContact','emergency':'emergencyContact','Emergency':'emergencyContact',
+  'medical info':'medicalInfo','Medical Info':'medicalInfo','medicalinfo':'medicalInfo','medical':'medicalInfo','Medical':'medicalInfo','health':'medicalInfo','Medical Information':'medicalInfo','health info':'medicalInfo',
+  'baptism date':'baptismDate','Baptism Date':'baptismDate','baptismdate':'baptismDate','baptism':'baptismDate','Baptism':'baptismDate',
+  'confirmation date':'confirmationDate','Confirmation Date':'confirmationDate','confirmationdate':'confirmationDate','confirmation':'confirmationDate','Confirmation':'confirmationDate',
+  'class':'class','Class':'class','grade':'class','Grade':'class','standard':'class','Standard':'class','std':'class',
+  'section':'section','Section':'section','division':'section','Division':'section','group':'section',
+  'extra curricular':'extraCurricular','Extra Curricular':'extraCurricular','extracurricular':'extraCurricular','ExtraCurricular':'extraCurricular','activities':'extraCurricular','Activities':'extraCurricular','extra':'extraCurricular',
+  'joined date':'joinedDate','Joined Date':'joinedDate','joineddate':'joinedDate','join date':'joinedDate','enrollment date':'joinedDate','Enrollment Date':'joinedDate','joining date':'joinedDate','Joining Date':'joinedDate',
+  'status':'status','Status':'status',
+  'notes':'notes','Notes':'notes','remarks':'notes','Remarks':'notes','comments':'notes','Comments':'notes','note':'notes',
+};
+
+function handleCSV(e) {
+  impErr = null;
+  impPrev = null;
+  var file = e.target.files[0];
+  if (!file) return;
+  
+  // Show loading state immediately
+  var dTabEl = document.getElementById('main');
+  
+  var reader = new FileReader();
+  reader.onerror = function() {
+    impErr = "Could not read file. Make sure it is a plain CSV text file.";
+    rb();
+    rebindCSVInput();
+  };
+  reader.onload = function(ev) {
+    try {
+      var text = ev.target.result;
+      // Remove BOM if present
+      text = text.replace(/^\uFEFF/, '');
+      
+      var lines = text.split(/\r?\n/).filter(function(l){ return l.trim() !== ''; });
+      
+      if (lines.length < 1) {
+        impErr = "The file is empty. Please upload a CSV with at least a header row and one data row.";
+        rb(); rebindCSVInput(); return;
+      }
+      if (lines.length < 2) {
+        impErr = "Only found a header row — no data rows. Add your student data below the header.";
+        rb(); rebindCSVInput(); return;
+      }
+      
+      var headerLine = lines[0];
+      var rawHeaders = parseCSVLine(headerLine);
+      var headers = rawHeaders.map(function(h){ return h.replace(/^"|"$/g,'').trim(); });
+      
+      if (headers.length === 0 || (headers.length === 1 && headers[0] === '')) {
+        impErr = "Could not read column headers. Make sure the first row contains column names separated by commas.";
+        rb(); rebindCSVInput(); return;
+      }
+      
+      // Map headers to canonical field names
+      var fieldMap = headers.map(function(h) {
+        return CSV_MAP[h] || CSV_MAP[h.toLowerCase()] || h;
+      });
+      
+      var knownKeys = new Set(Object.values(CSV_MAP));
+      
+      var rows = [];
+      var errs = [];
+      var skippedNoName = 0;
+      
+      for (var li = 1; li < lines.length; li++) {
+        var line = lines[li];
+        if (!line.trim()) continue;
+        
+        var vals = parseCSVLine(line);
+        var raw = {};
+        fieldMap.forEach(function(key, i) {
+          if (key) raw[key] = (vals[i] || '').replace(/^"|"$/g, '').trim();
+        });
+        
+        var name = raw.name || '';
+        if (!name) { skippedNoName++; errs.push('Row ' + (li+1) + ': skipped — no Name value'); continue; }
+        
+        // Build clean record — NO nested objects, all string values
+        var rec = {
+          id: uid(),
+          name: name,
+          fatherName: raw.fatherName || '',
+          fatherOccupation: raw.fatherOccupation || '',
+          motherName: raw.motherName || '',
+          motherOccupation: raw.motherOccupation || '',
+          phone1: String(raw.phone1 || ''),
+          phone2: String(raw.phone2 || ''),
+          fatherTime: raw.fatherTime || '',
+          houseName: raw.houseName || '',
+          wardName: raw.wardName || '',
+          district: raw.district || '',
+          state: raw.state || '',
+          country: raw.country || 'India',
+          dob: edISO(raw.dob || ''),
+          bloodGroup: raw.bloodGroup || '',
+          email: raw.email || '',
+          emergencyContact: raw.emergencyContact || '',
+          medicalInfo: raw.medicalInfo || '',
+          baptismDate: edISO(raw.baptismDate || ''),
+          confirmationDate: edISO(raw.confirmationDate || ''),
+          class: String(raw.class || ''),
+          section: raw.section || '',
+          extraCurricular: raw.extraCurricular || '',
+          joinedDate: edISO(raw.joinedDate || ''),
+          status: raw.status || 'Active',
+          notes: raw.notes || '',
+          createdAt: new Date().toISOString(),
+        };
+        rows.push(rec);
+      }
+      
+      if (rows.length === 0) {
+        impErr = 'No valid student records found. '
+          + (skippedNoName > 0 ? skippedNoName + ' row(s) had no Name. ' : '')
+          + 'Make sure your CSV has a "Name" column with values.';
+        rb(); rebindCSVInput(); return;
+      }
+      
+      impPrev = { rows: rows, headers: headers, errors: errs };
+      
+    } catch(err) {
+      impErr = 'CSV parse error: ' + err.message + '. Try saving the file as "CSV UTF-8" from Excel.';
+      console.error('CSV error:', err);
+    }
+    
+    rb();
+    rebindCSVInput();
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function rebindCSVInput() {
+  setTimeout(function() {
+    var el = document.getElementById('ci_inp');
+    if (el) { el.onchange = handleCSV; }
+  }, 60);
+}
+
+function confImport() {
+  if (!impPrev || !impPrev.rows || impPrev.rows.length === 0) {
+    toast('No data to import', 'error');
+    return;
+  }
+  
+  var added = 0, skipped = 0, dupes = [];
+  impPrev.rows.forEach(function(r) {
+    var dup = D.ch.find(function(c) {
+      return c.name.toLowerCase() === r.name.toLowerCase() && c.phone1 === r.phone1;
+    });
+    if (dup) { skipped++; dupes.push(r.name); return; }
+    D.ch.push(r);
+    added++;
+  });
+  
+  if (added === 0) {
+    toast('All ' + skipped + ' records already exist — no new records imported', 'error');
+    return;
+  }
+  
+  // Show saving indicator
+  toast('Saving ' + added + ' records to database…', 'info');
+  
+  // Save to Firebase — using compat .set()
+  var cleanData = {};
+  D.ch.forEach(function(x) {
+    if (!x || !x.id) return;
+    var rec = {};
+    Object.keys(x).forEach(function(k) {
+      var v = x[k];
+      if (v === undefined || v === null) { rec[k] = ''; return; }
+      if (typeof v === 'object') return; // skip nested objects
+      rec[k] = v;
+    });
+    cleanData[x.id] = rec;
+  });
+  
+  DB.ref('children').set(cleanData)
+    .then(function() {
+      var msg = added + ' student' + (added > 1 ? 's' : '') + ' imported successfully!'
+        + (skipped > 0 ? ' (' + skipped + ' duplicates skipped)' : '');
+      toast(msg, 'success');
+      auditLog('IMPORT', 'Imported ' + added + ', skipped ' + skipped);
+      impPrev = null;
+      rb();
+    })
+    .catch(function(e) {
+      toast('Save failed: ' + e.message + ' — check Firebase rules', 'error');
+      console.error('Firebase import error:', e);
+    });
+}
+
+
+function expCh(){
+  const flds=["name","dob","bloodGroup","email","emergencyContact","medicalInfo","fatherName","fatherOccupation","motherName","motherOccupation","phone1","phone2","fatherTime","houseName","wardName","district","state","country","baptismDate","confirmationDate","class","section","extraCurricular","joinedDate","status","notes"];
+  const hdrs=["Name","Date of Birth","Blood Group","Email","Emergency Contact","Medical Info","Father's Name","Father's Occupation","Mother's Name","Mother's Occupation","Phone 1","Phone 2","Father's Time","House Name","Ward Name","District","State","Country","Baptism Date","Confirmation Date","Class","Section","Extra Curricular","Joined Date","Status","Notes"];
+  const rows=[hdrs.join(","),...D.ch.map(c=>flds.map(k=>`"${c[k]||""}"`).join(","))];
+  dlf("children_export.csv",rows.join("\n"),"text/csv");toast("Children exported ✓")
+}
+function expAtt(){
+  const cmap=Object.fromEntries(D.ch.map(c=>[c.id,c.name]));
+  const h=["Date","Type","Child Name","Status","Mass Time","Day"];
+  const lines=[h.join(","),...D.att.map(a=>[a.date,a.type,`"${cmap[a.cid]||""}"`,a.status,a.mt||"",a.day||""].join(","))];
+  dlf("attendance_export.csv",lines.join("\n"),"text/csv");toast("Attendance exported ✓")
+}
+function expAsgn(){
+  const cmap=Object.fromEntries(D.ch.map(c=>[c.id,c.name]));
+  const h=["Day","Mass Time","Child Name"];
+  const lines=[h.join(","),...D.asgn.map(a=>[a.day,fmt12(a.mt),`"${cmap[a.cid]||""}"`].join(","))];
+  dlf("assignments_export.csv",lines.join("\n"),"text/csv");toast("Assignments exported ✓")
+}
+function doBackup(){
+  const data={version:5,exportedAt:new Date().toISOString(),children:D.ch,assignments:D.asgn,attendance:D.att,auditLog:D.log,headAsgn:D.headAsgn};
+  dlf(`parish_backup_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(data,null,2),"application/json");
+  audit("BACKUP","Manual backup created");toast("Backup created ✓")
+}
+function doRestore(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);if(!data.children){toast("Invalid backup file","error");return}
+      if(!confirm(`Restore backup from ${data.exportedAt}?\n\nThis will REPLACE all current data.`))return;
+      D.ch=data.children||D.ch;D.asgn=data.assignments||D.asgn;D.att=data.attendance||D.att;D.log=data.auditLog||D.log;D.headAsgn=data.headAsgn||{};
+      persist();audit("RESTORE",`Restored from ${data.exportedAt}`);toast("Backup restored ✓");rb()
+    }catch{toast("Failed to parse backup","error")}
+  };reader.readAsText(file)
+}
+function dlTemplate() {
+  var headers = "Name,Father's Name,Father's Occupation,Mother's Name,Mother's Occupation,Phone 1,Phone 2,House Name,Ward Name,District,State,Country,Date of Birth,Blood Group,Email,Emergency Contact,Medical Info,Baptism Date,Confirmation Date,Class,Section,Extra Curricular,Joined Date,Status,Notes";
+  var example = "Alen Thomas,Thomas Mathew,Engineer,Suja Thomas,Teacher,9876543210,,Mathew House,Ward 1,Thrissur,Kerala,India,2010-03-15,O+,,,,2010-07-10,,8,A,,2022-01-15,Active,";
+  var csv = headers + "\n" + example;
+  dlf('parish_student_template.csv', csv, 'text/csv');
+  toast('Template downloaded ✓', 'info');
+}
+
+
+function dlf(name,content,type){
+  const blob=new Blob([content],{type}),url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000)
+}
+
+/* ── INIT ─────────────────────────────────────────────────────────────── */
+// rNav and rb will be called by AUTH.onAuthStateChanged after login
+// No need to call them here — auth state fires automatically on page load
+</script>
+</body>
+</html>
